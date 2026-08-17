@@ -107,8 +107,8 @@ import mqtt from 'mqtt';
                     }
                     updateUI();
                 } else if (topic === TOPIC_RADAR) {
-                    if(data.minGate !== undefined) minGateSlider.value = data.minGate;
-                    if(data.maxGate !== undefined) maxGateSlider.value = data.maxGate;
+                    if(data.minDist !== undefined) minDistSlider.value = data.minDist;
+                    if(data.maxDist !== undefined) maxDistSlider.value = data.maxDist;
                     if(data.timeout !== undefined) timeoutSlider.value = data.timeout;
                     if(data.motion) {
                         for(let i=0; i<5; i++) {
@@ -150,8 +150,8 @@ import mqtt from 'mqtt';
         }
 
         // Radar Settings Logic
-        const minGateSlider = document.getElementById('minGate');
-        const maxGateSlider = document.getElementById('maxGate');
+        const minDistSlider = document.getElementById('minDist');
+        const maxDistSlider = document.getElementById('maxDist');
         const timeoutSlider = document.getElementById('timeout');
         
         let radarValues = {
@@ -253,16 +253,16 @@ import mqtt from 'mqtt';
         }
 
         function updateRadarUI() {
-            document.getElementById('minGateVal').innerText = (minGateSlider.value * 0.75).toFixed(2) + 'm';
-            document.getElementById('maxGateVal').innerText = (maxGateSlider.value * 0.75).toFixed(2) + 'm';
+            document.getElementById('minDistVal').innerText = minDistSlider.value + 'cm';
+            document.getElementById('maxDistVal').innerText = maxDistSlider.value + 'cm';
             document.getElementById('timeoutVal').innerText = timeoutSlider.value + 's';
         }
 
         function applyRadarSettings() {
             const payload = {
                 type: 'radar',
-                minGate: parseInt(minGateSlider.value),
-                maxGate: parseInt(maxGateSlider.value),
+                minDist: parseInt(minDistSlider.value),
+                maxDist: parseInt(maxDistSlider.value),
                 timeout: parseInt(timeoutSlider.value)
             };
             for(let i=0; i<5; i++) {
@@ -273,8 +273,8 @@ import mqtt from 'mqtt';
             showToast("Radar Command Sent to Cloud");
         }
 
-        minGateSlider.addEventListener('input', updateRadarUI);
-        maxGateSlider.addEventListener('input', updateRadarUI);
+        minDistSlider.addEventListener('input', updateRadarUI);
+        maxDistSlider.addEventListener('input', updateRadarUI);
         timeoutSlider.addEventListener('input', updateRadarUI);
 
         // Event Listeners for Sliders
