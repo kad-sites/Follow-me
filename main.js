@@ -23,6 +23,7 @@ import mqtt from 'mqtt';
         const speedSlider = document.getElementById('speed');
         const glowSlider = document.getElementById('glowSize');
         const fadeSlider = document.getElementById('fadeSigma');
+        const pixelsSlider = document.getElementById('activePixels');
         const colorGrid = document.getElementById('colorGrid');
         const toast = document.getElementById('toast');
 
@@ -48,6 +49,7 @@ import mqtt from 'mqtt';
             document.getElementById('speedVal').innerText = speedSlider.value;
             document.getElementById('glowVal').innerText = glowSlider.value;
             document.getElementById('fadeVal').innerText = fadeSlider.value;
+            if(pixelsSlider) document.getElementById('pixelsVal').innerText = pixelsSlider.value;
             
             // Update brightness track gradient
             brightSlider.style.setProperty('--track-bg', `linear-gradient(to right, #000, ${currentColorHex})`);
@@ -103,6 +105,7 @@ import mqtt from 'mqtt';
                     if(data.speed !== undefined) speedSlider.value = data.speed;
                     if(data.glowSize !== undefined) glowSlider.value = data.glowSize;
                     if(data.fadeSigma !== undefined) fadeSlider.value = data.fadeSigma;
+                    if(data.activePixels !== undefined) if(pixelsSlider) pixelsSlider.value = data.activePixels;
                     if(data.colorMode) {
                         const preset = colorPresets.find(p => p.name === data.colorMode);
                         if(preset) {
@@ -287,7 +290,8 @@ import mqtt from 'mqtt';
             { el: brightSlider, key: 'brightness' },
             { el: speedSlider, key: 'speed' },
             { el: glowSlider, key: 'glowSize' },
-            { el: fadeSlider, key: 'fadeSigma' }
+            { el: fadeSlider, key: 'fadeSigma' },
+            { el: pixelsSlider, key: 'activePixels' }
         ];
 
         sliders.forEach(s => {
