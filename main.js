@@ -211,6 +211,23 @@ import mqtt from 'mqtt';
         }
         renderEq();
 
+        // Click outside to close Radar Panel
+        document.addEventListener('click', (e) => {
+            const panel = document.getElementById('radarPanel');
+            const arrow = document.getElementById('radarArrow');
+            
+            // If the panel is open
+            if (panel && panel.style.display === 'block') {
+                // Check if the click was inside the panel OR on the toggle button itself
+                const clickedInside = e.target.closest('#radarPanel') || e.target.closest('[onclick="toggleRadar()"]');
+                
+                if (!clickedInside) {
+                    panel.style.display = 'none';
+                    arrow.innerText = '▼';
+                }
+            }
+        });
+
         function toggleAdvanced() {
             const panel = document.getElementById('advPanel');
             const arrow = document.getElementById('advArrow');
