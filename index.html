@@ -39,7 +39,8 @@
             flex-direction: column;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
             gap: 12px; /* Adjust spaces between banners */
         }
         
@@ -377,59 +378,62 @@
 
     <!-- Radar Settings -->
     <div class="section">
-        <div class="section-header" style="justify-content: flex-start; gap: 8px; margin-bottom: 12px;">
+        <div class="section-header" style="justify-content: space-between; margin-bottom: 0; cursor: pointer; padding: 4px 0;" onclick="toggleRadar()">
             <div class="section-title">Radar Settings</div>
+            <div id="radarArrow" style="color: var(--subtext); font-size: 12px;">▼</div>
         </div>
         
-        <div class="section-header">
-            <div class="section-title" style="font-size: 13px; font-weight: 500;">Min Distance</div>
-            <div class="value-display" id="minGateVal">0m</div>
-        </div>
-        <div class="slider-container" style="margin-bottom: 4px;">
-            <input type="range" id="minGate" min="0" max="15" value="0">
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
-            <span>0m</span><span>11m</span>
-        </div>
-
-        <div class="section-header">
-            <div class="section-title" style="font-size: 13px; font-weight: 500;">Max Distance</div>
-            <div class="value-display" id="maxGateVal">3m</div>
-        </div>
-        <div class="slider-container" style="margin-bottom: 4px;">
-            <input type="range" id="maxGate" min="0" max="15" value="4">
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
-            <span>0m</span><span>11m</span>
-        </div>
-
-        <div class="section-header">
-            <div class="section-title" style="font-size: 13px; font-weight: 500;">Timeout</div>
-            <div class="value-display" id="timeoutVal">5s</div>
-        </div>
-        <div class="slider-container" style="margin-bottom: 4px;">
-            <input type="range" id="timeout" min="1" max="60" value="5">
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 4px;">
-            <span>Quick</span><span>Patient</span>
-        </div>
-
-        <!-- Advanced Collapsible -->
-        <div class="advanced-toggle" id="advToggle" onclick="toggleAdvanced()">
-            Advanced <span id="advArrow">▼</span>
-        </div>
-        
-        <div id="advPanel" style="display: none;">
-            <div style="display: flex; justify-content: flex-end; gap: 12px; font-size: 11px; margin-top: 8px;">
-                <div style="display: flex; align-items: center; gap: 4px;"><div style="width:8px;height:8px;background:#3b82f6;border-radius:2px;"></div>Motion</div>
-                <div style="display: flex; align-items: center; gap: 4px;"><div style="width:8px;height:8px;background:#14b8a6;border-radius:2px;"></div>Static</div>
+        <div id="radarPanel" style="display: none; margin-top: 16px;">
+            <div class="section-header">
+                <div class="section-title" style="font-size: 13px; font-weight: 500;">Min Distance</div>
+                <div class="value-display" id="minGateVal">0m</div>
             </div>
-            <div class="eq-container" id="eqContainer">
-                <!-- EQ bars injected via JS -->
+            <div class="slider-container" style="margin-bottom: 4px;">
+                <input type="range" id="minGate" min="0" max="15" value="0">
             </div>
+            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
+                <span>0m</span><span>11m</span>
+            </div>
+
+            <div class="section-header">
+                <div class="section-title" style="font-size: 13px; font-weight: 500;">Max Distance</div>
+                <div class="value-display" id="maxGateVal">3m</div>
+            </div>
+            <div class="slider-container" style="margin-bottom: 4px;">
+                <input type="range" id="maxGate" min="0" max="15" value="4">
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
+                <span>0m</span><span>11m</span>
+            </div>
+
+            <div class="section-header">
+                <div class="section-title" style="font-size: 13px; font-weight: 500;">Timeout</div>
+                <div class="value-display" id="timeoutVal">5s</div>
+            </div>
+            <div class="slider-container" style="margin-bottom: 4px;">
+                <input type="range" id="timeout" min="1" max="60" value="5">
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 4px;">
+                <span>Quick</span><span>Patient</span>
+            </div>
+
+            <!-- Advanced Collapsible -->
+            <div class="advanced-toggle" id="advToggle" onclick="toggleAdvanced()">
+                Advanced <span id="advArrow">▼</span>
+            </div>
+            
+            <div id="advPanel" style="display: none;">
+                <div style="display: flex; justify-content: flex-end; gap: 12px; font-size: 11px; margin-top: 8px;">
+                    <div style="display: flex; align-items: center; gap: 4px;"><div style="width:8px;height:8px;background:#3b82f6;border-radius:2px;"></div>Motion</div>
+                    <div style="display: flex; align-items: center; gap: 4px;"><div style="width:8px;height:8px;background:#14b8a6;border-radius:2px;"></div>Static</div>
+                </div>
+                <div class="eq-container" id="eqContainer">
+                    <!-- EQ bars injected via JS -->
+                </div>
+            </div>
+            
+            <button class="apply-btn" id="applyRadarBtn" onclick="applyRadarSettings()">Apply to Sensor</button>
         </div>
-        
-        <button class="apply-btn" id="applyRadarBtn" onclick="applyRadarSettings()">Apply to Sensor</button>
     </div>
 
     <div class="toast" id="toast">Settings Saved</div>

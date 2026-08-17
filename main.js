@@ -175,6 +175,18 @@ import mqtt from 'mqtt';
             }
         }
 
+        function toggleRadar() {
+            const panel = document.getElementById('radarPanel');
+            const arrow = document.getElementById('radarArrow');
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                arrow.innerText = '▲';
+            } else {
+                panel.style.display = 'none';
+                arrow.innerText = '▼';
+            }
+        }
+
         function updateRadarUI() {
             document.getElementById('minGateVal').innerText = (minGateSlider.value * 0.75).toFixed(2) + 'm';
             document.getElementById('maxGateVal').innerText = (maxGateSlider.value * 0.75).toFixed(2) + 'm';
@@ -226,3 +238,4 @@ import mqtt from 'mqtt';
         
         window.applyRadarSettings = applyRadarSettings;
         window.toggleAdvanced = toggleAdvanced;
+        window.toggleRadar = toggleRadar;
