@@ -111,10 +111,18 @@ import mqtt from 'mqtt';
                     if(data.maxGate !== undefined) maxGateSlider.value = data.maxGate;
                     if(data.timeout !== undefined) timeoutSlider.value = data.timeout;
                     if(data.motion) {
-                        for(let i=0; i<5; i++) document.getElementById('m'+i).value = data.motion[i];
+                        for(let i=0; i<5; i++) {
+                            radarValues.m[i] = data.motion[i];
+                            let track = document.querySelector(`.bar-track[data-type="m"][data-index="${i}"] .bar-fill`);
+                            if(track) track.style.height = radarValues.m[i] + '%';
+                        }
                     }
                     if(data.static) {
-                        for(let i=0; i<5; i++) document.getElementById('s'+i).value = data.static[i];
+                        for(let i=0; i<5; i++) {
+                            radarValues.s[i] = data.static[i];
+                            let track = document.querySelector(`.bar-track[data-type="s"][data-index="${i}"] .bar-fill`);
+                            if(track) track.style.height = radarValues.s[i] + '%';
+                        }
                     }
                     updateRadarUI();
                 }
@@ -146,24 +154,60 @@ import mqtt from 'mqtt';
         const maxGateSlider = document.getElementById('maxGate');
         const timeoutSlider = document.getElementById('timeout');
         
+        let radarValues = {
+            m: [50, 50, 50, 50, 50],
+            s: [40, 40, 40, 40, 40]
+        };
+
         function renderEq() {
             let html = '';
             for(let i=0; i<5; i++) {
                 html += `
-                <div style="margin-bottom: 12px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px;">
-                    <div style="font-size: 11px; font-weight: 600; margin-bottom: 8px; color: #fff;">Gate ${i} Distance (${(i * 0.75).toFixed(2)}m)</div>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <span style="font-size:10px; width:36px; color:#3b82f6; text-align: right;">Motion</span>
-                        <input type="range" id="m${i}" min="0" max="100" value="50" style="flex:1;">
+                <div class="gate-col">
+                    <div class="bar-container">
+                        <div class="bar-track" data-type="m" data-index="${i}">
+                            <div class="bar-fill motion" style="height: ${radarValues.m[i]}%"></div>
+                        </div>
+                        <div class="bar-track" data-type="s" data-index="${i}">
+                            <div class="bar-fill static" style="height: ${radarValues.s[i]}%"></div>
+                        </div>
                     </div>
-                    <div style="display: flex; gap: 8px; align-items: center; margin-top: 8px;">
-                        <span style="font-size:10px; width:36px; color:#14b8a6; text-align: right;">Static</span>
-                        <input type="range" id="s${i}" min="0" max="100" value="40" style="flex:1;">
-                    </div>
+                    <div class="gate-label">${(i*0.75).toFixed(1)}m</div>
                 </div>
                 `;
             }
             document.getElementById('eqContainer').innerHTML = html;
+
+            document.querySelectorAll('.bar-track').forEach(track => {
+                let isDragging = false;
+                
+                function updateValue(e) {
+                    const rect = track.getBoundingClientRect();
+                    let y = e.clientY - rect.top;
+                    let percent = 100 - (y / rect.height * 100);
+                    if (percent < 0) percent = 0;
+                    if (percent > 100) percent = 100;
+                    
+                    let val = Math.round(percent);
+                    let type = track.getAttribute('data-type');
+                    let idx = parseInt(track.getAttribute('data-index'));
+                    radarValues[type][idx] = val;
+                    track.querySelector('.bar-fill').style.height = val + '%';
+                }
+
+                track.addEventListener('pointerdown', e => {
+                    isDragging = true;
+                    track.setPointerCapture(e.pointerId);
+                    updateValue(e);
+                });
+                track.addEventListener('pointermove', e => {
+                    if (isDragging) updateValue(e);
+                });
+                track.addEventListener('pointerup', e => {
+                    isDragging = false;
+                    track.releasePointerCapture(e.pointerId);
+                });
+            });
         }
         renderEq();
 
@@ -205,8 +249,8 @@ import mqtt from 'mqtt';
                 timeout: parseInt(timeoutSlider.value)
             };
             for(let i=0; i<5; i++) {
-                payload['m'+i] = parseInt(document.getElementById('m'+i).value);
-                payload['s'+i] = parseInt(document.getElementById('s'+i).value);
+                payload['m'+i] = radarValues.m[i];
+                payload['s'+i] = radarValues.s[i];
             }
             sendUpdate(payload);
             showToast("Radar Command Sent to Cloud");
