@@ -69,7 +69,12 @@ import mqtt from 'mqtt';
         }
 
         // Network Comms via MQTT
-        const DEVICE_MAC = prompt("Enter Device ID (MAC Address):", "A1B2C3") || "A1B2C3";
+        let storedMac = localStorage.getItem('DEVICE_MAC');
+        if (!storedMac) {
+            storedMac = prompt("Enter Device ID (MAC Address):", "3C8A1F0961D4") || "3C8A1F0961D4";
+            localStorage.setItem('DEVICE_MAC', storedMac);
+        }
+        const DEVICE_MAC = storedMac;
         const TOPIC_STATUS = `followme/${DEVICE_MAC}/status`;
         const TOPIC_RADAR = `followme/${DEVICE_MAC}/radar`;
         const TOPIC_CMD = `followme/${DEVICE_MAC}/cmd`;
@@ -299,6 +304,11 @@ import mqtt from 'mqtt';
             updateUI();
             sendUpdate({ colorMode: name, r: r, g: g, b: b });
             showToast("Color Sent");
+        }
+        
+        window.resetDeviceId = function() {
+            localStorage.removeItem('DEVICE_MAC');
+            location.reload();
         }
         
         window.applyRadarSettings = applyRadarSettings;
