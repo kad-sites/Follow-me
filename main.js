@@ -90,6 +90,7 @@ import mqtt from 'mqtt';
             statusDot.classList.add('connected');
             isConnected = true;
             showToast("Cloud Connected");
+            sendUpdate({ request: "status" });
         });
 
         client.on('close', () => {
@@ -318,3 +319,4 @@ import mqtt from 'mqtt';
         window.applyRadarSettings = applyRadarSettings;
         window.toggleAdvanced = toggleAdvanced;
         window.toggleRadar = toggleRadar;
+
