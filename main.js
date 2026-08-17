@@ -150,12 +150,16 @@ import mqtt from 'mqtt';
             let html = '';
             for(let i=0; i<5; i++) {
                 html += `
-                <div class="eq-col">
-                    <div class="eq-sliders">
-                        <input type="range" class="eq-slider motion" id="m${i}" min="0" max="100" value="50">
-                        <input type="range" class="eq-slider static" id="s${i}" min="0" max="100" value="40">
+                <div style="margin-bottom: 12px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px;">
+                    <div style="font-size: 11px; font-weight: 600; margin-bottom: 8px; color: #fff;">Gate ${i} Distance (${(i * 0.75).toFixed(2)}m)</div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <span style="font-size:10px; width:36px; color:#3b82f6; text-align: right;">Motion</span>
+                        <input type="range" id="m${i}" min="0" max="100" value="50" style="flex:1;">
                     </div>
-                    <div class="eq-label">Gate ${i}</div>
+                    <div style="display: flex; gap: 8px; align-items: center; margin-top: 8px;">
+                        <span style="font-size:10px; width:36px; color:#14b8a6; text-align: right;">Static</span>
+                        <input type="range" id="s${i}" min="0" max="100" value="40" style="flex:1;">
+                    </div>
                 </div>
                 `;
             }
