@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Follow Me LED</title>
+    <!-- PWA Settings: Makes it installable as a native app on the home screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0d0d0d">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%232ecc71%22/><text x=%2250%22 y=%2250%22 font-family=%22Arial%22 font-size=%2240%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.3em%22>LED</text></svg>">
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Follow Me LED","short_name":"LED","display":"standalone","background_color":"#0d0d0d","theme_color":"#0d0d0d","icons":[{"src":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAB6klEQVR4nO3SQQkAIADAQBPZzZ6GsoN7iHBwAfbYmHvBtfG8gK8ZiMRAJAYiMRCJgUgMRGIgEgORGIjEQCQGIjEQiYFIDERiIBIDkRiIxEAkBiIxEImBSAxEYiASA5EYiMRAJAYiMRCJgUgMRGIgEgORGIjEQCQGIjEQiYFIDERiIBIDkRiIxEAkBiIxEImBSAxEYiASA5EYiMRAJAYiMRCJgUgMRGIgEgORGIjEQCQGIjEQiYFIDERiIBIDkRiIxEAkBiIxEImBSAxEYiASA5EYiMRAJAYiMRCJgUgMRGIgEgORGIjEQCQGIjEQiYFIDERiIBIDkRiIxEAkBiIxEImBSAxEYiASA5EYiMRAJAYiMRCJgUgMRGIgEgORGIjEQCQGIjEQiYFIDERiIBIDkRiIxEAkBiIxEImBSAxEYiASA5EYiMRAJAYiMRCJgUgMRGIgEgORGIjEQCQGIjEQiYFIDERiIBIDkRiIxEAkBiIxEImBSAxEYiASA5EYiMRAJAYiMRCJgUgMRGIgEgORGIjEQCQGIjEQiYFIDERiIBIDkRiIxEAkBiIxEImBSAzEKg5SZTv1Ebm92QAAAABJRU5ErkJggg==","sizes":"192x192","type":"image/png"},{"src":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAIAAAB7GkOtAAAHIElEQVR4nO3VMQ0AMAzAsCIat/EcqMHoEUsGkC9z3gUgaNYLAFhhAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGABBlAABRBgAQZQAAUQYAEGUAAFEGAHCbPva2VRXF8+IrAAAAAElFTkSuQmCC","sizes":"512x512","type":"image/png"}]}'>
+    <style>
+        :root {
+            --bg: #0f1115;
+            --card: rgba(25, 28, 35, 0.6);
+            --text: #ffffff;
+            --subtext: #888888;
+            --accent: #2ecc71;
+            --border: rgba(255, 255, 255, 0.05);
+            --thumb-size: 24px; /* Slightly smaller for sleekness */
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(145deg, #07090e 0%, #161b28 50%, #0a0e17 100%);
+            background-attachment: fixed;
+            color: var(--text);
+            margin: 0;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            gap: 12px; /* Adjust spaces between banners */
+        }
+        
+        .header {
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px; /* Two line gap from header */
+            width: 100%;
+        }
+
+        .header h1 { font-size: 20px; }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ff3b30;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #ff3b30;
+            transition: all 0.3s;
+        }
+        .status-dot.connected {
+            background-color: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+        }
+
+        .status-dot.connected {
+            background-color: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+        }
+
+        .section {
+            background-color: var(--card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 16px;
+            padding: 12px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px; /* Tighter margin */
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .value-display {
+            font-size: 14px;
+            color: var(--subtext);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Sliders */
+        .slider-container {
+            width: 100%;
+            padding: 4px 0;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--subtext);
+            margin-top: 4px; /* tighter */
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            height: 24px; /* sleeker tap target */
+        }
+        
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px; /* thinner track */
+            cursor: pointer;
+            background: #333;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            height: var(--thumb-size);
+            width: var(--thumb-size);
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: calc(-1 * (var(--thumb-size) / 2) + 3px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        #brightness::-webkit-slider-runnable-track {
+            background: linear-gradient(to right, #000, #fff);
+        }
+
+        /* Color Grid */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 columns = 2 tight rows instead of 3 */
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .color-group-title { display: none; } /* Hide titles to save vertical space */
+
+        .color-btn {
+            background: transparent;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 4px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .color-swatch {
+            width: 32px; /* Smaller swatches */
+            height: 32px;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .color-name {
+            display: none; /* Hide individual names to save huge amount of vertical space */
+        }
+
+        .color-btn.active .color-swatch {
+            border-color: #fff;
+            transform: scale(1.1);
+        }
+
+        .color-btn.active .color-name {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(46, 204, 113, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.3s;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Radar UI */
+        .advanced-toggle {
+            font-size: 13px;
+            color: var(--subtext);
+            padding: 12px 0 4px 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+        }
+        .eq-container {
+            display: flex;
+            justify-content: space-between;
+            height: 120px;
+            margin-top: 16px;
+            padding: 0 10px;
+        }
+        .eq-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 40px;
+        }
+        .eq-sliders {
+            position: relative;
+            width: 30px;
+            height: 100px;
+            margin-bottom: 25px;
+        }
+        .eq-slider {
+            -webkit-appearance: none;
+            width: 100px;
+            height: 6px;
+            border-radius: 4px;
+            position: absolute;
+            left: 5px;
+            bottom: 0;
+            transform: rotate(-90deg);
+            transform-origin: 0 50%;
+            margin: 0;
+        }
+        .eq-slider.motion { background: #1e3a8a; }
+        .eq-slider.static { left: 18px; background: #0f766e; }
+        .eq-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        .eq-label {
+            font-size: 10px;
+            color: var(--subtext);
+            text-align: center;
+            margin-top: 15px;
+        }
+        .apply-btn {
+            background: rgba(20, 184, 166, 0.15);
+            color: #2dd4bf;
+            border: 1px solid rgba(20, 184, 166, 0.3);
+            border-radius: 12px;
+            padding: 10px;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .apply-btn:active {
+            background: rgba(20, 184, 166, 0.3);
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="title" style="font-weight: 600; font-size: 18px; display: flex; align-items: center; gap: 8px;">
+            <span class="status-dot" id="statusDot"></span>
+            Corridor Light Controller
+        </div>
+    </div>
+
+    <!-- Brightness -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">Brightness</div>
+            <div class="value-display" id="brightVal">100%</div>
+        </div>
+        <div class="slider-container">
+            <input type="range" id="brightness" min="0" max="255" value="255">
+        </div>
+    </div>
+
+    <!-- Speed -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">Follow Speed</div>
+            <div class="value-display" id="speedVal">10</div>
+        </div>
+        <div class="slider-container">
+            <input type="range" id="speed" min="1" max="20" value="10">
+            <div class="slider-labels">
+                <span>Smooth</span>
+                <span>Snappy</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Glow Size -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">Glow Width</div>
+            <div class="value-display" id="glowVal">18</div>
+        </div>
+        <div class="slider-container">
+            <input type="range" id="glowSize" min="6" max="60" value="18">
+            <div class="slider-labels">
+                <span>Narrow</span>
+                <span>Wide</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fade Spread -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">Fade Spread</div>
+            <div class="value-display" id="fadeVal">40</div>
+        </div>
+        <div class="slider-container">
+            <input type="range" id="fadeSigma" min="10" max="100" value="40">
+            <div class="slider-labels">
+                <span>Sharp</span>
+                <span>Soft</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Color Modes -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">Color Mode</div>
+        </div>
+        <div class="color-grid" id="colorGrid">
+            <!-- Populated via JS -->
+        </div>
+    </div>
+
+    <!-- Radar Settings -->
+    <div class="section">
+        <div class="section-header" style="justify-content: flex-start; gap: 8px; margin-bottom: 12px;">
+            <div class="section-title">Radar Settings</div>
+        </div>
+        
+        <div class="section-header">
+            <div class="section-title" style="font-size: 13px; font-weight: 500;">Min Distance</div>
+            <div class="value-display" id="minGateVal">0m</div>
+        </div>
+        <div class="slider-container" style="margin-bottom: 4px;">
+            <input type="range" id="minGate" min="0" max="15" value="0">
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
+            <span>0m</span><span>11m</span>
+        </div>
+
+        <div class="section-header">
+            <div class="section-title" style="font-size: 13px; font-weight: 500;">Max Distance</div>
+            <div class="value-display" id="maxGateVal">3m</div>
+        </div>
+        <div class="slider-container" style="margin-bottom: 4px;">
+            <input type="range" id="maxGate" min="0" max="15" value="4">
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
+            <span>0m</span><span>11m</span>
+        </div>
+
+        <div class="section-header">
+            <div class="section-title" style="font-size: 13px; font-weight: 500;">Timeout</div>
+            <div class="value-display" id="timeoutVal">5s</div>
+        </div>
+        <div class="slider-container" style="margin-bottom: 4px;">
+            <input type="range" id="timeout" min="1" max="60" value="5">
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 4px;">
+            <span>Quick</span><span>Patient</span>
+        </div>
+
+        <!-- Advanced Collapsible -->
+        <div class="advanced-toggle" id="advToggle" onclick="toggleAdvanced()">
+            Advanced <span id="advArrow">▼</span>
+        </div>
+        
+        <div id="advPanel" style="display: none;">
+            <div style="display: flex; justify-content: flex-end; gap: 12px; font-size: 11px; margin-top: 8px;">
+                <div style="display: flex; align-items: center; gap: 4px;"><div style="width:8px;height:8px;background:#3b82f6;border-radius:2px;"></div>Motion</div>
+                <div style="display: flex; align-items: center; gap: 4px;"><div style="width:8px;height:8px;background:#14b8a6;border-radius:2px;"></div>Static</div>
+            </div>
+            <div class="eq-container" id="eqContainer">
+                <!-- EQ bars injected via JS -->
+            </div>
+        </div>
+        
+        <button class="apply-btn" id="applyRadarBtn" onclick="applyRadarSettings()">Apply to Sensor</button>
+    </div>
+
+    <div class="toast" id="toast">Settings Saved</div>
+
+    <script type="module" src="/main.js"></script>
+</body>
+</html>
