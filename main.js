@@ -117,14 +117,14 @@ import mqtt from 'mqtt';
             console.log('Connected to HiveMQ Cloud');
             client.subscribe(TOPIC_STATUS);
             client.subscribe(TOPIC_RADAR);
-            statusDot.classList.add('connected');
+            if(statusDot) statusDot.classList.add('connected');
             isConnected = true;
             showToast("Cloud Connected");
             sendUpdate({ request: "status" });
         });
 
         client.on('close', () => {
-            statusDot.classList.remove('connected');
+            if(statusDot) statusDot.classList.remove('connected');
             document.getElementById('connErrorMsg').style.display = 'block';
             isConnected = false;
         });
