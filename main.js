@@ -67,10 +67,27 @@ import mqtt from 'mqtt';
             fBrightSlider.style.setProperty('--track-bg', `linear-gradient(to right, #000, ${followColorHex})`);
             bBrightSlider.style.setProperty('--track-bg', `linear-gradient(to right, #000, ${baseColorHex})`);
             
+            // Glow width calculation (center out)
+            const glowMin = parseInt(glowSlider.min) || 6;
+            const glowMax = parseInt(glowSlider.max) || 60;
+            const glowVal = parseInt(glowSlider.value);
+            const glowP = (glowVal - glowMin) / (glowMax - glowMin);
+            const halfP = (glowP * 100) / 2;
+            const leftEdge = 50 - halfP;
+            const rightEdge = 50 + halfP;
+            
             // For webkit styles injection
-            const style = document.createElement('style');
-            style.innerHTML = `#followBrightness::-webkit-slider-runnable-track { background: linear-gradient(to right, #222, ${followColorHex}) !important; } #baseBrightness::-webkit-slider-runnable-track { background: linear-gradient(to right, #222, ${baseColorHex}) !important; }`;
-            document.head.appendChild(style);
+            let style = document.getElementById('dynamic-slider-styles');
+            if (!style) {
+                style = document.createElement('style');
+                style.id = 'dynamic-slider-styles';
+                document.head.appendChild(style);
+            }
+            style.innerHTML = `
+                #followBrightness::-webkit-slider-runnable-track { background: linear-gradient(to right, #222, ${followColorHex}) !important; }
+                #baseBrightness::-webkit-slider-runnable-track { background: linear-gradient(to right, #222, ${baseColorHex}) !important; }
+                #glowSize::-webkit-slider-runnable-track { background: linear-gradient(to right, #333 0%, #333 ${leftEdge}%, ${baseColorHex} ${leftEdge}%, ${baseColorHex} ${rightEdge}%, #333 ${rightEdge}%, #333 100%) !important; }
+            `;
         }
 
         function setActiveColorBtn(name) {
