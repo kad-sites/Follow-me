@@ -329,7 +329,7 @@ import mqtt from 'mqtt';
         sliders.forEach(s => {
             s.el.addEventListener('input', () => {
                 updateUI();
-                throttledUpdate({ [s.key]: parseInt(s.el.value) });
+                // throttledUpdate removed - waiting for Apply button
             });
         });
 
@@ -374,8 +374,31 @@ import mqtt from 'mqtt';
             location.reload();
         }
         
+                function applyMainSettings() {
+            const payload = {};
+            sliders.forEach(s => {
+                if (s.el) payload[s.key] = parseInt(s.el.value);
+            });
+            sendUpdate(payload);
+            showToast("Settings Applied to ESP32");
+        }
+        window.applyMainSettings = applyMainSettings;
+
         window.applyRadarSettings = applyRadarSettings;
         window.toggleAdvanced = toggleAdvanced;
+                function toggleColor() {
+            const panel = document.getElementById('colorPanel');
+            const arrow = document.getElementById('colorArrow');
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                arrow.innerHTML = '&#9650;';
+            } else {
+                panel.style.display = 'none';
+                arrow.innerHTML = '&#9660;';
+            }
+        }
+
         window.toggleRadar = toggleRadar;
+        window.toggleColor = toggleColor;
         window.toggleCalib = toggleCalib;
 
