@@ -241,7 +241,7 @@ import mqtt from 'mqtt';
                 
                 if (!clickedInside) {
                     panel.style.display = 'none';
-                    arrow.innerText = 'â–¼';
+                    arrow.innerText = '▼';
                 }
             }
         });
@@ -251,10 +251,10 @@ import mqtt from 'mqtt';
             const arrow = document.getElementById('advArrow');
             if (panel.style.display === 'none') {
                 panel.style.display = 'block';
-                arrow.innerText = 'â–²';
+                arrow.innerText = '▲';
             } else {
                 panel.style.display = 'none';
-                arrow.innerText = 'â–¼';
+                arrow.innerText = '▼';
             }
         }
 
@@ -263,10 +263,22 @@ import mqtt from 'mqtt';
             const arrow = document.getElementById('radarArrow');
             if (panel.style.display === 'none') {
                 panel.style.display = 'block';
-                arrow.innerText = 'â–²';
+                arrow.innerText = '▲';
             } else {
                 panel.style.display = 'none';
-                arrow.innerText = 'â–¼';
+                arrow.innerText = '▼';
+            }
+        }
+
+        function toggleCalib() {
+            const panel = document.getElementById('calibPanel');
+            const arrow = document.getElementById('calibArrow');
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                arrow.innerText = '▲';
+            } else {
+                panel.style.display = 'none';
+                arrow.innerText = '▼';
             }
         }
 
@@ -357,4 +369,5 @@ import mqtt from 'mqtt';
         window.applyRadarSettings = applyRadarSettings;
         window.toggleAdvanced = toggleAdvanced;
         window.toggleRadar = toggleRadar;
+        window.toggleCalib = toggleCalib;
 
