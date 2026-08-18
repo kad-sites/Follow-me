@@ -241,7 +241,7 @@ import mqtt from 'mqtt';
                 
                 if (!clickedInside) {
                     panel.style.display = 'none';
-                    arrow.innerText = '▼';
+                    arrow.innerHTML = '&#9660;';
                 }
             }
         });
@@ -251,10 +251,10 @@ import mqtt from 'mqtt';
             const arrow = document.getElementById('advArrow');
             if (panel.style.display === 'none') {
                 panel.style.display = 'block';
-                arrow.innerText = '▲';
+                arrow.innerHTML = '&#9650;';
             } else {
                 panel.style.display = 'none';
-                arrow.innerText = '▼';
+                arrow.innerHTML = '&#9660;';
             }
         }
 
@@ -263,10 +263,10 @@ import mqtt from 'mqtt';
             const arrow = document.getElementById('radarArrow');
             if (panel.style.display === 'none') {
                 panel.style.display = 'block';
-                arrow.innerText = '▲';
+                arrow.innerHTML = '&#9650;';
             } else {
                 panel.style.display = 'none';
-                arrow.innerText = '▼';
+                arrow.innerHTML = '&#9660;';
             }
         }
 
@@ -275,10 +275,10 @@ import mqtt from 'mqtt';
             const arrow = document.getElementById('calibArrow');
             if (panel.style.display === 'none') {
                 panel.style.display = 'block';
-                arrow.innerText = '▲';
+                arrow.innerHTML = '&#9650;';
             } else {
                 panel.style.display = 'none';
-                arrow.innerText = '▼';
+                arrow.innerHTML = '&#9660;';
             }
         }
 
