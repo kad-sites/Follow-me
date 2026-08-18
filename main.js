@@ -118,10 +118,8 @@ import mqtt from 'mqtt';
                     if(data.fadeSigma !== undefined) fadeSlider.value = data.fadeSigma;
                     if(data.activePixels !== undefined) if(pixelsSlider) pixelsSlider.value = data.activePixels;
 
-                    if(data.fR !== undefined) followColorHex = 
-gb(\,\,\)\;
-                    if(data.bR !== undefined) baseColorHex = 
-gb(\,\,\)\;
+                    if(data.fR !== undefined) followColorHex = `rgb(${data.fR},${data.fG},${data.fB})`;
+                    if(data.bR !== undefined) baseColorHex = `rgb(${data.bR},${data.bG},${data.bB})`;
                     // color mode active button logic skipped for simplicity when splitting targets
 
                     updateUI();
