@@ -76,7 +76,7 @@
             box-shadow: 0 0 8px var(--accent);
         }
 
-        .section { margin-bottom: 12px; padding: 12px 16px; 
+        .section { margin-bottom: 4px; padding: 8px 16px; 
             background-color: var(--card);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -90,10 +90,10 @@
 
         .section-header {
             display: flex;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px; /* Tighter margin */
+            margin-bottom: 4px; /* Tighter margin */
         }
 
         .section-title {
@@ -325,7 +325,7 @@
         <div class="slider-container">
             <input type="range" style="touch-action: pan-y;" id="followBrightness" min="0" max="255" value="255">
         </div>
-        <br>
+        
         <div class="section-header">
             <div class="section-title">Base Brightness</div>
             <div class="value-display" id="bBrightVal">4%</div>
@@ -333,10 +333,7 @@
         <div class="slider-container">
             <input type="range" style="touch-action: pan-y;" id="baseBrightness" min="0" max="255" value="10">
         </div>
-    </div>
-
-    <!-- Speed -->
-    <div class="section">
+        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 16px 0;"></div>
         <div class="section-header">
             <div class="section-title">Follow Speed</div>
             <div class="value-display" id="speedVal">10</div>
@@ -348,7 +345,7 @@
                 <span>Snappy</span>
             </div>
         </div>
-        <br>
+        
         <div class="section-header">
             <div class="section-title">Lead Distance</div>
             <div class="value-display" id="leadVal">20</div>
@@ -360,10 +357,7 @@
                 <span>Ahead</span>
             </div>
         </div>
-    </div>
-
-    <!-- Glow Size -->
-    <div class="section">
+        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 16px 0;"></div>
         <div class="section-header">
             <div class="section-title">Glow Width</div>
             <div class="value-display" id="glowVal">18</div>
@@ -391,10 +385,9 @@
                 <span>300</span>
             </div>
         </div>
-    </div>
 
-    <!-- Fade Spread -->
-    <div class="section">
+        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 16px 0;"></div>
+
         <div class="section-header">
             <div class="section-title">Fade Spread</div>
             <div class="value-display" id="fadeVal">40</div>
@@ -409,7 +402,7 @@
     </div>
 
     <!-- Apply Settings Button -->
-    <button class="apply-btn" style="margin-top: 0; margin-bottom: 12px; border: 1px solid rgba(96, 165, 250, 0.3); background: rgba(96, 165, 250, 0.15); color: #60a5fa;" onclick="applyMainSettings()">Apply LED Settings</button>
+    <button class="apply-btn" style="margin-top: 0; margin-bottom: 4px; border: 1px solid rgba(96, 165, 250, 0.3); background: rgba(96, 165, 250, 0.15); color: #60a5fa;" onclick="applyMainSettings()">Apply LED Settings</button>
 
     <!-- Color Modes -->
     <div class="section">
@@ -419,7 +412,7 @@
         </div>
         
         <div id="colorPanel" style="display: none; margin-top: 12px;">
-            <div style="display: flex; gap: 8px; margin-bottom: 8px; background: rgba(0,0,0,0.3); padding: 4px; border-radius: 8px;">
+            <div style="display: flex; gap: 8px; margin-bottom: 4px; background: rgba(0,0,0,0.3); padding: 4px; border-radius: 8px;">
                 <button id="tgtFollowBtn" class="apply-btn active-tab" style="margin:0; font-size:12px; padding:8px; border:1px solid #60a5fa;" onclick="setColorTarget('follow')">Follow Portion</button>
                 <button id="tgtBaseBtn" class="apply-btn" style="margin:0; font-size:12px; padding:8px; background:transparent; color:#94a3b8;" onclick="setColorTarget('base')">Base Strip</button>
             </div>
@@ -444,7 +437,7 @@
             <div class="slider-container" style="margin-bottom: 4px;">
                 <input type="range" style="touch-action: pan-y;" id="ledDensity" min="10" max="144" value="60">
             </div>
-            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 4px;">
                 <span>30/m</span><span>144/m</span>
             </div>
 
@@ -455,7 +448,7 @@
             <div class="slider-container" style="margin-bottom: 4px;">
                 <input type="range" style="touch-action: pan-y;" id="sensorOffset" min="-200" max="200" value="0">
             </div>
-            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 4px;">
                 <span>-200cm</span><span>+200cm</span>
             </div>
         </div>
@@ -476,7 +469,7 @@
             <div class="slider-container" style="margin-bottom: 4px;">
                 <input type="range" style="touch-action: pan-y;" id="minDist" min="20" max="500" value="20" step="5">
             </div>
-            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 4px;">
                 <span>0.2m</span><span>5.0m</span>
             </div>
 
@@ -487,7 +480,7 @@
             <div class="slider-container" style="margin-bottom: 4px;">
                 <input type="range" style="touch-action: pan-y;" id="maxDist" min="20" max="500" value="300" step="5">
             </div>
-            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 4px;">
                 <span>0.2m</span><span>5.0m</span>
             </div>
 
