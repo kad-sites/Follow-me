@@ -257,7 +257,8 @@ import mqtt from 'mqtt';
             const panels = [
                 { id: 'radarPanel', arrow: 'radarArrow', toggle: 'toggleRadar()' },
                 { id: 'colorPanel', arrow: 'colorArrow', toggle: 'toggleColor()' },
-                { id: 'calibPanel', arrow: 'calibArrow', toggle: 'toggleCalib()' }
+                { id: 'calibPanel', arrow: 'calibArrow', toggle: 'toggleCalib()' },
+                { id: 'pixelsPanel', arrow: 'pixelsArrow', toggle: 'togglePixels()' }
             ];
             
             panels.forEach(p => {
@@ -315,20 +316,7 @@ import mqtt from 'mqtt';
             document.getElementById('timeoutVal').innerText = timeoutSlider.value + 's';
         }
 
-        function applyRadarSettings() {
-            const payload = {
-                type: 'radar',
-                minDist: parseInt(minDistSlider.value),
-                maxDist: parseInt(maxDistSlider.value),
-                timeout: parseInt(timeoutSlider.value)
-            };
-            for(let i=0; i<5; i++) {
-                payload['m'+i] = radarValues.m[i];
-                payload['s'+i] = radarValues.s[i];
-            }
-            sendUpdate(payload);
-            showToast("Radar Command Sent to Cloud");
-        }
+        
 
         minDistSlider.addEventListener('input', updateRadarUI);
         maxDistSlider.addEventListener('input', updateRadarUI);
@@ -350,8 +338,32 @@ import mqtt from 'mqtt';
         sliders.forEach(s => {
             s.el.addEventListener('input', () => {
                 updateUI();
-                // throttledUpdate removed - waiting for Apply button
             });
+        });
+        
+        // Add live "change" listeners to all dropdown sliders so they send immediately
+        const liveSliders = [
+            { el: pixelsSlider, key: 'activePixels' },
+            { el: densitySlider, key: 'ledDensity' },
+            { el: offsetSlider, key: 'sensorOffset' },
+            { el: minDistSlider, key: 'minDist' },
+            { el: maxDistSlider, key: 'maxDist' },
+            { el: timeoutSlider, key: 'timeout' }
+        ];
+        
+        liveSliders.forEach(s => {
+            if (s.el) {
+                // Use 'change' so it fires when user lifts their finger
+                s.el.addEventListener('change', () => {
+                    let payload = {};
+                    payload[s.key] = parseInt(s.el.value);
+                    if (s.key === 'minDist' || s.key === 'maxDist' || s.key === 'timeout') {
+                        payload['type'] = 'radar';
+                    }
+                    sendUpdate(payload);
+                    showToast("Setting updated live");
+                });
+            }
         });
 
         // Color Selection
@@ -432,9 +444,21 @@ import mqtt from 'mqtt';
         }
         window.applyMainSettings = applyMainSettings;
 
-        window.applyRadarSettings = applyRadarSettings;
         window.toggleAdvanced = toggleAdvanced;
-                function toggleColor() {
+                function togglePixels() {
+            const panel = document.getElementById('pixelsPanel');
+            const arrow = document.getElementById('pixelsArrow');
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                arrow.innerHTML = '&#9650;';
+            } else {
+                panel.style.display = 'none';
+                arrow.innerHTML = '&#9660;';
+            }
+        }
+        window.togglePixels = togglePixels;
+        
+        function toggleColor() {
             const panel = document.getElementById('colorPanel');
             const arrow = document.getElementById('colorArrow');
             if (panel.style.display === 'none') {

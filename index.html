@@ -371,14 +371,11 @@
             </div>
         </div>
     </div>
-
-    
-    <!-- Active Pixels -->
-    <div class="section">
+        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 16px 0;"></div>
         <div class="section-header">
-            <div class="section-title" style="cursor: pointer; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.2); text-decoration-style: dotted;" onclick="promptPixelLimits()">Active Pixels</div>
-            <div class="value-display" id="pixelsVal">180</div>
-        </div>
+            <div class="section-title">Fade Spread</div>
+            <div class="value-display" id="fadeVal">0</div>
+
         <div class="slider-container">
             <input type="range" style="touch-action: pan-y;" id="activePixels" min="1" max="300" value="150">
             <div class="slider-labels">
@@ -390,11 +387,6 @@
     
     <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 16px 0;"></div>
 
-    <div class="section">
-        <div class="section-header">
-            <div class="section-title">Fade Spread</div>
-            <div class="value-display" id="fadeVal">0</div>
-        </div>
         <div class="slider-container">
             <input type="range" style="touch-action: pan-y;" id="fadeSigma" min="0" max="100" value="0">
             <div class="slider-labels">
@@ -406,6 +398,26 @@
 
     <!-- Apply Settings Button -->
     <button class="apply-btn" style="max-width: 450px; margin-top: 0; margin-bottom: 4px; border: 1px solid rgba(96, 165, 250, 0.3); background: rgba(96, 165, 250, 0.15); color: #60a5fa;" onclick="applyMainSettings()">Apply LED Settings</button>
+
+    <!-- Active Pixels -->
+    <div class="section">
+        <div class="section-header" style="justify-content: space-between; margin-bottom: 0; cursor: pointer; padding: 4px 0;" onclick="togglePixels()">
+            <div class="section-title" style="cursor: pointer; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.2); text-decoration-style: dotted;" onclick="event.stopPropagation(); promptPixelLimits()">Active Pixels</div>
+            <div id="pixelsArrow" style="color: var(--subtext); font-size: 12px;">&#9660;</div>
+        </div>
+        <div id="pixelsPanel" style="display: none; margin-top: 16px;">
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 8px;">
+                <div class="value-display" id="pixelsVal">150</div>
+            </div>
+            <div class="slider-container">
+                <input type="range" style="touch-action: pan-y;" id="activePixels" min="1" max="300" value="150">
+                <div class="slider-labels">
+                    <span id="pixelsMinLabel">1</span>
+                    <span id="pixelsMaxLabel">300</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Color Modes -->
     <div class="section">
@@ -513,8 +525,6 @@
                 </div>
                 <button class="apply-btn" style="background: var(--surface); border: 1px solid var(--border); color: var(--text); margin-top: 12px;" onclick="resetDeviceId()">Change Device ID</button>
             </div>
-            
-            <button class="apply-btn" id="applyRadarBtn" onclick="applyRadarSettings()">Apply to Sensor</button>
         </div>
     </div>
 
