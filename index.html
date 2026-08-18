@@ -376,19 +376,21 @@
     <!-- Active Pixels -->
     <div class="section">
         <div class="section-header">
-            <div class="section-title">Active Pixels</div>
+            <div class="section-title" style="cursor: pointer; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.2); text-decoration-style: dotted;" onclick="promptPixelLimits()">Active Pixels</div>
             <div class="value-display" id="pixelsVal">180</div>
         </div>
         <div class="slider-container">
-            <input type="range" style="touch-action: pan-y;" id="activePixels" min="10" max="300" value="150">
+            <input type="range" style="touch-action: pan-y;" id="activePixels" min="1" max="300" value="150">
             <div class="slider-labels">
-                <span>10</span>
-                <span>300</span>
+                <span id="pixelsMinLabel">1</span>
+                <span id="pixelsMaxLabel">300</span>
             </div>
         </div>
+    </div>
+    
+    <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 16px 0;"></div>
 
-        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 16px 0;"></div>
-
+    <div class="section">
         <div class="section-header">
             <div class="section-title">Fade Spread</div>
             <div class="value-display" id="fadeVal">0</div>

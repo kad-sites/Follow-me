@@ -390,6 +390,33 @@ import mqtt from 'mqtt';
         }
 
         
+        
+        window.promptPixelLimits = function() {
+            let slider = document.getElementById('activePixels');
+            let currentMin = slider.min;
+            let currentMax = slider.max;
+            
+            let newMin = prompt("Enter Minimum Active Pixels:", currentMin);
+            if (newMin !== null) {
+                newMin = parseInt(newMin);
+                if (!isNaN(newMin) && newMin > 0) {
+                    slider.min = newMin;
+                    document.getElementById('pixelsMinLabel').innerText = newMin;
+                }
+            }
+            
+            let newMax = prompt("Enter Maximum Active Pixels:", currentMax);
+            if (newMax !== null) {
+                newMax = parseInt(newMax);
+                let currentSliderMin = parseInt(slider.min);
+                if (!isNaN(newMax) && newMax > currentSliderMin) {
+                    slider.max = newMax;
+                    document.getElementById('pixelsMaxLabel').innerText = newMax;
+                }
+            }
+            updateUI();
+        }
+        
         window.resetDeviceId = function() {
             localStorage.removeItem('DEVICE_MAC');
             location.reload();
