@@ -60,11 +60,12 @@ import mqtt from 'mqtt';
             if(pixelsSlider) document.getElementById('pixelsVal').innerText = pixelsSlider.value;
             
             // Update brightness track gradient
-            brightSlider.style.setProperty('--track-bg', `linear-gradient(to right, #000, ${currentColorHex})`);
+            fBrightSlider.style.setProperty('--track-bg', `linear-gradient(to right, #000, ${followColorHex})`);
+            bBrightSlider.style.setProperty('--track-bg', `linear-gradient(to right, #000, ${baseColorHex})`);
             
             // For webkit styles injection
             const style = document.createElement('style');
-            style.innerHTML = `#brightness::-webkit-slider-runnable-track { background: linear-gradient(to right, #222, ${currentColorHex}) !important; }`;
+            style.innerHTML = `#followBrightness::-webkit-slider-runnable-track { background: linear-gradient(to right, #222, ${followColorHex}) !important; } #baseBrightness::-webkit-slider-runnable-track { background: linear-gradient(to right, #222, ${baseColorHex}) !important; }`;
             document.head.appendChild(style);
         }
 
