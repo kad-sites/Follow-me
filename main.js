@@ -86,7 +86,7 @@ import mqtt from 'mqtt';
             style.innerHTML = `
                 #followBrightness::-webkit-slider-runnable-track { background: linear-gradient(to right, #222, ${followColorHex}) !important; }
                 #baseBrightness::-webkit-slider-runnable-track { background: linear-gradient(to right, #222, ${baseColorHex}) !important; }
-                #glowSize::-webkit-slider-runnable-track { background: linear-gradient(to right, #333 0%, #333 ${leftEdge}%, ${baseColorHex} ${leftEdge}%, ${baseColorHex} ${rightEdge}%, #333 ${rightEdge}%, #333 100%) !important; }
+                #glowSize::-webkit-slider-runnable-track { background: linear-gradient(to right, #333 0%, #333 ${leftEdge}%, ${baseColorHex} 50%, #333 ${rightEdge}%, #333 100%) !important; }
             `;
         }
 
