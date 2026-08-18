@@ -380,7 +380,7 @@ import mqtt from 'mqtt';
                 if (s.el) payload[s.key] = parseInt(s.el.value);
             });
             sendUpdate(payload);
-            showToast("Settings Applied to ESP32");
+            showToast("Settings Applied to Controller");
         }
         window.applyMainSettings = applyMainSettings;
 
