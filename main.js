@@ -125,6 +125,7 @@ import mqtt from 'mqtt';
 
         client.on('close', () => {
             statusDot.classList.remove('connected');
+            document.getElementById('connErrorMsg').style.display = 'block';
             isConnected = false;
         });
 
