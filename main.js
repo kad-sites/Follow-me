@@ -119,9 +119,9 @@ import mqtt from 'mqtt';
                     if(data.activePixels !== undefined) if(pixelsSlider) pixelsSlider.value = data.activePixels;
 
                     if(data.fR !== undefined) followColorHex = 
-gb(,,);
+gb(\,\,\)\;
                     if(data.bR !== undefined) baseColorHex = 
-gb(,,);
+gb(\,\,\)\;
                     // color mode active button logic skipped for simplicity when splitting targets
 
                     updateUI();
