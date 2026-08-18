@@ -421,11 +421,43 @@
         </div>
     </div>
 
+    <!-- Calibration Settings -->
+    <div class="section">
+        <div class="section-header" style="justify-content: space-between; margin-bottom: 0; cursor: pointer; padding: 4px 0;" onclick="toggleCalib()">
+            <div class="section-title">Calibration (Fix Alignment)</div>
+            <div id="calibArrow" style="color: var(--subtext); font-size: 12px;">?</div>
+        </div>
+        
+        <div id="calibPanel" style="display: none; margin-top: 16px;">
+            <div class="section-header">
+                <div class="section-title" style="font-size: 13px; font-weight: 500;">LED Density</div>
+                <div class="value-display" id="densityVal">60 LEDs/m</div>
+            </div>
+            <div class="slider-container" style="margin-bottom: 4px;">
+                <input type="range" style="touch-action: pan-y;" id="ledDensity" min="10" max="144" value="60">
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
+                <span>30/m</span><span>144/m</span>
+            </div>
+
+            <div class="section-header">
+                <div class="section-title" style="font-size: 13px; font-weight: 500;">Sensor Offset</div>
+                <div class="value-display" id="offsetVal">0 cm</div>
+            </div>
+            <div class="slider-container" style="margin-bottom: 4px;">
+                <input type="range" style="touch-action: pan-y;" id="sensorOffset" min="-200" max="200" value="0">
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
+                <span>-200cm</span><span>+200cm</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Radar Settings -->
     <div class="section">
         <div class="section-header" style="justify-content: space-between; margin-bottom: 0; cursor: pointer; padding: 4px 0;" onclick="toggleRadar()">
             <div class="section-title">Radar Settings</div>
-            <div id="radarArrow" style="color: var(--subtext); font-size: 12px;">▼</div>
+            <div id="radarArrow" style="color: var(--subtext); font-size: 12px;">â–¼</div>
         </div>
         
         <div id="radarPanel" style="display: none; margin-top: 16px;">
@@ -464,7 +496,7 @@
 
             <!-- Advanced Collapsible -->
             <div class="advanced-toggle" id="advToggle" onclick="toggleAdvanced()">
-                Advanced <span id="advArrow">▼</span>
+                Advanced <span id="advArrow">â–¼</span>
             </div>
             
             <div id="advPanel" style="display: none;">

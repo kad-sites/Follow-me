@@ -241,7 +241,7 @@ import mqtt from 'mqtt';
                 
                 if (!clickedInside) {
                     panel.style.display = 'none';
-                    arrow.innerText = '▼';
+                    arrow.innerText = 'â–¼';
                 }
             }
         });
@@ -251,10 +251,10 @@ import mqtt from 'mqtt';
             const arrow = document.getElementById('advArrow');
             if (panel.style.display === 'none') {
                 panel.style.display = 'block';
-                arrow.innerText = '▲';
+                arrow.innerText = 'â–²';
             } else {
                 panel.style.display = 'none';
-                arrow.innerText = '▼';
+                arrow.innerText = 'â–¼';
             }
         }
 
@@ -263,10 +263,10 @@ import mqtt from 'mqtt';
             const arrow = document.getElementById('radarArrow');
             if (panel.style.display === 'none') {
                 panel.style.display = 'block';
-                arrow.innerText = '▲';
+                arrow.innerText = 'â–²';
             } else {
                 panel.style.display = 'none';
-                arrow.innerText = '▼';
+                arrow.innerText = 'â–¼';
             }
         }
 
