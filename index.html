@@ -318,11 +318,19 @@
     <!-- Brightness -->
     <div class="section">
         <div class="section-header">
-            <div class="section-title">Brightness</div>
-            <div class="value-display" id="brightVal">100%</div>
+            <div class="section-title">Follow Brightness</div>
+            <div class="value-display" id="fBrightVal">100%</div>
         </div>
         <div class="slider-container">
-            <input type="range" id="brightness" min="0" max="255" value="255">
+            <input type="range" style="touch-action: pan-y;" id="followBrightness" min="0" max="255" value="255">
+        </div>
+        <br>
+        <div class="section-header">
+            <div class="section-title">Base Brightness</div>
+            <div class="value-display" id="bBrightVal">4%</div>
+        </div>
+        <div class="slider-container">
+            <input type="range" style="touch-action: pan-y;" id="baseBrightness" min="0" max="255" value="10">
         </div>
     </div>
 
@@ -333,10 +341,22 @@
             <div class="value-display" id="speedVal">10</div>
         </div>
         <div class="slider-container">
-            <input type="range" id="speed" min="1" max="20" value="10">
+            <input type="range" style="touch-action: pan-y;" id="speed" min="1" max="50" value="10">
             <div class="slider-labels">
                 <span>Smooth</span>
                 <span>Snappy</span>
+            </div>
+        </div>
+        <br>
+        <div class="section-header">
+            <div class="section-title">Lead Distance</div>
+            <div class="value-display" id="leadVal">20</div>
+        </div>
+        <div class="slider-container">
+            <input type="range" style="touch-action: pan-y;" id="leadFactor" min="0" max="50" value="20">
+            <div class="slider-labels">
+                <span>Centered</span>
+                <span>Ahead</span>
             </div>
         </div>
     </div>
@@ -348,7 +368,7 @@
             <div class="value-display" id="glowVal">18</div>
         </div>
         <div class="slider-container">
-            <input type="range" id="glowSize" min="6" max="60" value="18">
+            <input type="range" style="touch-action: pan-y;" id="glowSize" min="6" max="60" value="18">
             <div class="slider-labels">
                 <span>Narrow</span>
                 <span>Wide</span>
@@ -364,7 +384,7 @@
             <div class="value-display" id="pixelsVal">180</div>
         </div>
         <div class="slider-container">
-            <input type="range" id="activePixels" min="10" max="300" value="180">
+            <input type="range" style="touch-action: pan-y;" id="activePixels" min="10" max="300" value="180">
             <div class="slider-labels">
                 <span>10</span>
                 <span>300</span>
@@ -379,7 +399,7 @@
             <div class="value-display" id="fadeVal">40</div>
         </div>
         <div class="slider-container">
-            <input type="range" id="fadeSigma" min="10" max="100" value="40">
+            <input type="range" style="touch-action: pan-y;" id="fadeSigma" min="10" max="100" value="40">
             <div class="slider-labels">
                 <span>Sharp</span>
                 <span>Soft</span>
@@ -391,6 +411,10 @@
     <div class="section">
         <div class="section-header">
             <div class="section-title">Color Mode</div>
+        </div>
+        <div style="display: flex; gap: 8px; margin-bottom: 16px; background: rgba(0,0,0,0.3); padding: 4px; border-radius: 8px;">
+            <button id="tgtFollowBtn" class="apply-btn active-tab" style="margin:0; font-size:12px; padding:8px; border:1px solid #60a5fa;" onclick="setColorTarget('follow')">Follow Portion</button>
+            <button id="tgtBaseBtn" class="apply-btn" style="margin:0; font-size:12px; padding:8px; background:transparent; color:#94a3b8;" onclick="setColorTarget('base')">Base Strip</button>
         </div>
         <div class="color-grid" id="colorGrid">
             <!-- Populated via JS -->
@@ -410,7 +434,7 @@
                 <div class="value-display" id="minDistVal">20cm</div>
             </div>
             <div class="slider-container" style="margin-bottom: 4px;">
-                <input type="range" id="minDist" min="20" max="500" value="20" step="5">
+                <input type="range" style="touch-action: pan-y;" id="minDist" min="20" max="500" value="20" step="5">
             </div>
             <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
                 <span>0.2m</span><span>5.0m</span>
@@ -421,7 +445,7 @@
                 <div class="value-display" id="maxDistVal">300cm</div>
             </div>
             <div class="slider-container" style="margin-bottom: 4px;">
-                <input type="range" id="maxDist" min="20" max="500" value="300" step="5">
+                <input type="range" style="touch-action: pan-y;" id="maxDist" min="20" max="500" value="300" step="5">
             </div>
             <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 12px;">
                 <span>0.2m</span><span>5.0m</span>
@@ -432,7 +456,7 @@
                 <div class="value-display" id="timeoutVal">5s</div>
             </div>
             <div class="slider-container" style="margin-bottom: 4px;">
-                <input type="range" id="timeout" min="1" max="60" value="5">
+                <input type="range" style="touch-action: pan-y;" id="timeout" min="1" max="60" value="5">
             </div>
             <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--subtext); margin-bottom: 4px;">
                 <span>Quick</span><span>Patient</span>

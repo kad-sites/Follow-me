@@ -14,13 +14,19 @@ import mqtt from 'mqtt';
         ];
 
         // State
-        let currentColorHex = "#ff9329";
+        
+        let colorTarget = 'follow'; // 'follow' or 'base'
+        let followColorHex = "#ff9329";
+        let baseColorHex = "#ff9329";
+
         let isConnected = false;
         
         // DOM Elements
         const statusDot = document.getElementById('statusDot');
-        const brightSlider = document.getElementById('brightness');
+        const fBrightSlider = document.getElementById('followBrightness');
+        const bBrightSlider = document.getElementById('baseBrightness');
         const speedSlider = document.getElementById('speed');
+        const leadSlider = document.getElementById('leadFactor');
         const glowSlider = document.getElementById('glowSize');
         const fadeSlider = document.getElementById('fadeSigma');
         const pixelsSlider = document.getElementById('activePixels');
@@ -45,8 +51,10 @@ import mqtt from 'mqtt';
 
         // Update UI Visuals
         function updateUI() {
-            document.getElementById('brightVal').innerText = Math.round((brightSlider.value / 255) * 100) + '%';
+            document.getElementById('fBrightVal').innerText = Math.round((fBrightSlider.value / 255) * 100) + '%';
+            document.getElementById('bBrightVal').innerText = Math.round((bBrightSlider.value / 255) * 100) + '%';
             document.getElementById('speedVal').innerText = speedSlider.value;
+            if(leadSlider) document.getElementById('leadVal').innerText = leadSlider.value;
             document.getElementById('glowVal').innerText = glowSlider.value;
             document.getElementById('fadeVal').innerText = fadeSlider.value;
             if(pixelsSlider) document.getElementById('pixelsVal').innerText = pixelsSlider.value;
@@ -102,18 +110,20 @@ import mqtt from 'mqtt';
             try {
                 const data = JSON.parse(message.toString());
                 if (topic === TOPIC_STATUS) {
-                    if(data.brightness !== undefined) brightSlider.value = data.brightness;
+                    if(data.followBrightness !== undefined) fBrightSlider.value = data.followBrightness;
+                    if(data.baseBrightness !== undefined) bBrightSlider.value = data.baseBrightness;
                     if(data.speed !== undefined) speedSlider.value = data.speed;
+                    if(data.leadFactor !== undefined && leadSlider) leadSlider.value = data.leadFactor;
                     if(data.glowSize !== undefined) glowSlider.value = data.glowSize;
                     if(data.fadeSigma !== undefined) fadeSlider.value = data.fadeSigma;
                     if(data.activePixels !== undefined) if(pixelsSlider) pixelsSlider.value = data.activePixels;
-                    if(data.colorMode) {
-                        const preset = colorPresets.find(p => p.name === data.colorMode);
-                        if(preset) {
-                            currentColorHex = preset.ui;
-                            setActiveColorBtn(data.colorMode);
-                        }
-                    }
+
+                    if(data.fR !== undefined) followColorHex = 
+gb(,,);
+                    if(data.bR !== undefined) baseColorHex = 
+gb(,,);
+                    // color mode active button logic skipped for simplicity when splitting targets
+
                     updateUI();
                 } else if (topic === TOPIC_RADAR) {
                     if(data.minDist !== undefined) minDistSlider.value = data.minDist;
@@ -288,7 +298,9 @@ import mqtt from 'mqtt';
 
         // Event Listeners for Sliders
         const sliders = [
-            { el: brightSlider, key: 'brightness' },
+            { el: fBrightSlider, key: 'followBrightness' },
+            { el: bBrightSlider, key: 'baseBrightness' },
+            { el: leadSlider, key: 'leadFactor' },
             { el: speedSlider, key: 'speed' },
             { el: glowSlider, key: 'glowSize' },
             { el: fadeSlider, key: 'fadeSigma' },
@@ -304,12 +316,39 @@ import mqtt from 'mqtt';
 
         // Color Selection
         window.selectColor = function(name, r, g, b, uiHex) {
-            currentColorHex = uiHex;
             setActiveColorBtn(name);
+            if (colorTarget === 'follow') {
+                followColorHex = uiHex;
+                sendUpdate({ fR: r, fG: g, fB: b });
+            } else {
+                baseColorHex = uiHex;
+                sendUpdate({ bR: r, bG: g, bB: b });
+            }
             updateUI();
-            sendUpdate({ colorMode: name, r: r, g: g, b: b });
-            showToast("Color Sent");
+            showToast("Color Sent to " + colorTarget);
         }
+        
+        window.setColorTarget = function(target) {
+            colorTarget = target;
+            const followBtn = document.getElementById('tgtFollowBtn');
+            const baseBtn = document.getElementById('tgtBaseBtn');
+            if (target === 'follow') {
+                followBtn.style.background = 'transparent';
+                followBtn.style.border = '1px solid #60a5fa';
+                followBtn.style.color = '#fff';
+                baseBtn.style.background = 'transparent';
+                baseBtn.style.border = 'none';
+                baseBtn.style.color = '#94a3b8';
+            } else {
+                baseBtn.style.background = 'transparent';
+                baseBtn.style.border = '1px solid #60a5fa';
+                baseBtn.style.color = '#fff';
+                followBtn.style.background = 'transparent';
+                followBtn.style.border = 'none';
+                followBtn.style.color = '#94a3b8';
+            }
+        }
+
         
         window.resetDeviceId = function() {
             localStorage.removeItem('DEVICE_MAC');
