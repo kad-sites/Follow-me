@@ -30,6 +30,8 @@ import mqtt from 'mqtt';
         const glowSlider = document.getElementById('glowSize');
         const fadeSlider = document.getElementById('fadeSigma');
         const pixelsSlider = document.getElementById('activePixels');
+        const densitySlider = document.getElementById('ledDensity');
+        const offsetSlider = document.getElementById('sensorOffset');
         const colorGrid = document.getElementById('colorGrid');
         const toast = document.getElementById('toast');
 
@@ -58,6 +60,8 @@ import mqtt from 'mqtt';
             document.getElementById('glowVal').innerText = glowSlider.value;
             document.getElementById('fadeVal').innerText = fadeSlider.value;
             if(pixelsSlider) document.getElementById('pixelsVal').innerText = pixelsSlider.value;
+            if(densitySlider) document.getElementById('densityVal').innerText = densitySlider.value + ' LEDs/m';
+            if(offsetSlider) document.getElementById('offsetVal').innerText = offsetSlider.value + ' cm';
             
             // Update brightness track gradient
             fBrightSlider.style.setProperty('--track-bg', `linear-gradient(to right, #000, ${followColorHex})`);
@@ -118,6 +122,8 @@ import mqtt from 'mqtt';
                     if(data.glowSize !== undefined) glowSlider.value = data.glowSize;
                     if(data.fadeSigma !== undefined) fadeSlider.value = data.fadeSigma;
                     if(data.activePixels !== undefined) if(pixelsSlider) pixelsSlider.value = data.activePixels;
+                    if(data.ledDensity !== undefined && densitySlider) densitySlider.value = data.ledDensity;
+                    if(data.sensorOffset !== undefined && offsetSlider) offsetSlider.value = data.sensorOffset;
 
                     if(data.fR !== undefined) followColorHex = `rgb(${data.fR},${data.fG},${data.fB})`;
                     if(data.bR !== undefined) baseColorHex = `rgb(${data.bR},${data.bG},${data.bB})`;
@@ -315,7 +321,9 @@ import mqtt from 'mqtt';
             { el: speedSlider, key: 'speed' },
             { el: glowSlider, key: 'glowSize' },
             { el: fadeSlider, key: 'fadeSigma' },
-            { el: pixelsSlider, key: 'activePixels' }
+            { el: pixelsSlider, key: 'activePixels' },
+            { el: densitySlider, key: 'ledDensity' },
+            { el: offsetSlider, key: 'sensorOffset' }
         ];
 
         sliders.forEach(s => {
