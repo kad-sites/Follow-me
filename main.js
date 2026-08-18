@@ -237,19 +237,23 @@ import mqtt from 'mqtt';
 
         // Click outside to close Radar Panel
         document.addEventListener('click', (e) => {
-            const panel = document.getElementById('radarPanel');
-            const arrow = document.getElementById('radarArrow');
+            const panels = [
+                { id: 'radarPanel', arrow: 'radarArrow', toggle: 'toggleRadar()' },
+                { id: 'colorPanel', arrow: 'colorArrow', toggle: 'toggleColor()' },
+                { id: 'calibPanel', arrow: 'calibArrow', toggle: 'toggleCalib()' }
+            ];
             
-            // If the panel is open
-            if (panel && panel.style.display === 'block') {
-                // Check if the click was inside the panel OR on the toggle button itself
-                const clickedInside = e.target.closest('#radarPanel') || e.target.closest('[onclick="toggleRadar()"]');
-                
-                if (!clickedInside) {
-                    panel.style.display = 'none';
-                    arrow.innerHTML = '&#9660;';
+            panels.forEach(p => {
+                const panel = document.getElementById(p.id);
+                const arrow = document.getElementById(p.arrow);
+                if (panel && panel.style.display === 'block') {
+                    const clickedInside = e.target.closest('#' + p.id) || e.target.closest('[onclick="' + p.toggle + '"]');
+                    if (!clickedInside) {
+                        panel.style.display = 'none';
+                        arrow.innerHTML = '&#9660;';
+                    }
                 }
-            }
+            });
         });
 
         function toggleAdvanced() {
