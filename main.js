@@ -350,8 +350,10 @@ function toggleTvPower() {
                       });
                       if (tvEffect === 'custom') {
                           document.getElementById('customSeqPanel').style.display = 'block';
+                          document.getElementById('effectSpeedBlock').style.display = 'none';
                       } else {
                           document.getElementById('customSeqPanel').style.display = 'none';
+                          document.getElementById('effectSpeedBlock').style.display = 'block';
                       }
                   }
                     if (data.r !== undefined && data.g !== undefined && data.b !== undefined) {
