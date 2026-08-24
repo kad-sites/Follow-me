@@ -28,7 +28,7 @@ import mqtt from 'mqtt';
         let tvSpeed = 50;
         let tvPixels = 27;
         let cSeg = 4;
-        let cSeqStr = "1, 2, 3, 4";
+        let cSeqStr = "1-2-3-4";
         let cDel = 500;
         let cAcc = false;
         
@@ -49,6 +49,11 @@ import mqtt from 'mqtt';
         document.getElementById('cSeg').addEventListener('input', (e) => {
             cSeg = parseInt(e.target.value);
             document.getElementById('cSegVal').innerText = cSeg;
+            // Auto-generate default sequence 1-2-3-...-N
+            let seq = [];
+            for (let i = 1; i <= cSeg; i++) seq.push(i);
+            cSeqStr = seq.join('-');
+            document.getElementById('cSeqStr').value = cSeqStr;
             if (isConnected) throttledTvUpdate();
         });
         document.getElementById('cDel').addEventListener('input', (e) => {
@@ -61,7 +66,8 @@ import mqtt from 'mqtt';
             if (isConnected) throttledTvUpdate();
         });
         document.getElementById('cSeqStr').addEventListener('change', (e) => {
-            cSeqStr = e.target.value;
+            cSeqStr = e.target.value.replace(/,/g, '-').replace(/\s+/g, '');
+            e.target.value = cSeqStr;
             if (isConnected) throttledTvUpdate();
         });
 let tvTimeoutId;
@@ -176,7 +182,7 @@ function toggleTvPower() {
                 payload.c_seg = cSeg;
                 payload.c_del = cDel;
                 payload.c_acc = cAcc;
-                payload.c_seq = cSeqStr.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+                payload.c_seq = cSeqStr.split('-').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
             }
             
             client.publish("kad/tvbacklit/cmd/zoheb", JSON.stringify(payload), { retain: true });
