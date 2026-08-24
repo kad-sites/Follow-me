@@ -110,18 +110,38 @@ function toggleTvPower() {
 
         }
 
-        function toggleTvColor() {
+                function toggleTvColor() {
             const content = document.getElementById('tvColorContent');
             const chevron = document.getElementById('tvColorChevron');
             content.classList.toggle('open');
             chevron.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            
+            // Auto close Effect panel
+            if (content.classList.contains('open')) {
+                const effContent = document.getElementById('tvEffectContent');
+                const effChevron = document.getElementById('tvEffectChevron');
+                if (effContent) {
+                    effContent.classList.remove('open');
+                    effChevron.style.transform = 'rotate(0deg)';
+                }
+            }
         }
 
-        function toggleTvEffect() {
+                function toggleTvEffect() {
             const content = document.getElementById('tvEffectContent');
             const chevron = document.getElementById('tvEffectChevron');
             content.classList.toggle('open');
             chevron.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            
+            // Auto close Color panel
+            if (content.classList.contains('open')) {
+                const colContent = document.getElementById('tvColorContent');
+                const colChevron = document.getElementById('tvColorChevron');
+                if (colContent) {
+                    colContent.classList.remove('open');
+                    colChevron.style.transform = 'rotate(0deg)';
+                }
+            }
         }
 
         function setTvColor(btn, r, g, b) {
