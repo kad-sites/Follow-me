@@ -39,9 +39,12 @@ import mqtt from 'mqtt';
             document.getElementById('tvSpeedVal').innerText = tvSpeed + '%';
             if (isConnected) throttledTvUpdate();
         });
-        document.getElementById('tvPixels').addEventListener('input', (e) => {
-            tvPixels = parseInt(e.target.value);
-            document.getElementById('tvPixelsVal').innerText = tvPixels;
+        document.getElementById('tvPixels').addEventListener('change', (e) => {
+            let v = parseInt(e.target.value);
+            if (isNaN(v) || v < 10) v = 10;
+            if (v > 300) v = 300;
+            e.target.value = v;
+            tvPixels = v;
             if (isConnected) throttledTvUpdate();
         });
         
