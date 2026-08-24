@@ -83,7 +83,7 @@ import mqtt from 'mqtt';
                 g: tvColor.g,
                 b: tvColor.b
             };
-            client.publish("kad/tvbacklit/cmd", JSON.stringify(payload));
+            client.publish("kad/tvbacklit/cmd/zoheb", JSON.stringify(payload));
             showToast("TV Sent");
         }
 
