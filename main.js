@@ -24,7 +24,27 @@ import mqtt from 'mqtt';
         let activeTab = 'corridor';
         let tvColor = { r: 255, g: 147, b: 41 };
         let tvEffect = 'solid';
+        let tvPower = true;
+        let tvSpeed = 50;
         
+        
+        function toggleTvPower() {
+            tvPower = !tvPower;
+            const btn = document.getElementById('tvPowerBtn');
+            if (tvPower) {
+                btn.innerText = "TURN OFF";
+                btn.style.color = "#10b981";
+                btn.style.background = "rgba(16, 185, 129, 0.15)";
+                btn.style.borderColor = "rgba(16, 185, 129, 0.3)";
+            } else {
+                btn.innerText = "TURN ON";
+                btn.style.color = "#ef4444";
+                btn.style.background = "rgba(239, 68, 68, 0.15)";
+                btn.style.borderColor = "rgba(239, 68, 68, 0.3)";
+            }
+            sendTvUpdate();
+        }
+
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => {
                 el.classList.remove('active');
@@ -77,7 +97,9 @@ import mqtt from 'mqtt';
             if (!isConnected) return;
             const b = parseInt(document.getElementById('tvBrightness').value);
             const payload = {
+                state: tvPower ? "ON" : "OFF",
                 effect: tvEffect,
+                speed: tvSpeed,
                 brightness: b,
                 r: tvColor.r,
                 g: tvColor.g,
@@ -580,22 +602,48 @@ import mqtt from 'mqtt';
         }
 
         
+
         const tvBrightEl = document.getElementById('tvBrightness');
         if (tvBrightEl) {
             tvBrightEl.addEventListener('input', (e) => {
-                const v = e.target.value;
-                const pct = Math.round((v / 255) * 100);
+                const pct = Math.round((e.target.value / 255) * 100);
                 document.getElementById('tvBrightVal').innerText = pct + '%';
-                
-                const min = e.target.min || 0;
-                const max = e.target.max || 100;
-                const percentage = ((v - min) / (max - min)) * 100;
-                e.target.style.background = `linear-gradient(to right, rgb(${tvColor.r}, ${tvColor.g}, ${tvColor.b}) ${percentage}%, #333 ${percentage}%)`;
             });
             tvBrightEl.addEventListener('change', () => {
                 sendTvUpdate();
             });
         }
+
+        const tvSpeedEl = document.getElementById('tvSpeed');
+        if (tvSpeedEl) {
+            tvSpeedEl.addEventListener('input', (e) => {
+                document.getElementById('tvSpeedVal').innerText = e.target.value + '%';
+            });
+            tvSpeedEl.addEventListener('change', (e) => {
+                tvSpeed = parseInt(e.target.value);
+                sendTvUpdate();
+            });
+        }
+
+        const tvTempEl = document.getElementById('tvTemp');
+        if (tvTempEl) {
+            tvTempEl.addEventListener('input', (e) => {
+                const val = parseInt(e.target.value); // 0 to 100
+                document.getElementById('tvTempVal').innerText = val < 30 ? "Warm" : (val > 70 ? "Cool" : "Neutral");
+                // Lerp between Warm (255, 147, 41) and Cool (255, 255, 255)
+                const r = 255;
+                const g = Math.round(147 + ((255 - 147) * (val / 100.0)));
+                const b = Math.round(41 + ((255 - 41) * (val / 100.0)));
+                tvColor = {r, g, b};
+                
+                // Remove active class from color grid
+                document.querySelectorAll('.tv-color-btn').forEach(btn => btn.classList.remove('active'));
+            });
+            tvTempEl.addEventListener('change', () => {
+                sendTvUpdate();
+            });
+        }
+
 
         window.toggleRadar = toggleRadar;
         window.toggleColor = toggleColor;
@@ -608,3 +656,4 @@ import mqtt from 'mqtt';
         window.setTvColor = setTvColor;
         window.setTvEffect = setTvEffect;
         window.sendTvUpdate = sendTvUpdate;
+        window.toggleTvPower = toggleTvPower;
