@@ -26,11 +26,22 @@ import mqtt from 'mqtt';
         let tvEffect = 'solid';
         
         function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+                el.style.display = 'none';
+            });
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
-            document.getElementById('tab-' + tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            const target = document.getElementById('tab-' + tabId);
+            if (target) {
+                target.classList.add('active');
+                target.style.display = 'flex';
+            }
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(tabId === 'corridor' ? 'corridor' : 'tv')) {
+                    btn.classList.add('active');
+                }
+            });
             activeTab = tabId;
         }
 
@@ -72,9 +83,7 @@ import mqtt from 'mqtt';
                 g: tvColor.g,
                 b: tvColor.b
             };
-            const msg = new Paho.Message(JSON.stringify(payload));
-            msg.destinationName = "kad/tvbacklit/cmd";
-            client.send(msg);
+            client.publish("kad/tvbacklit/cmd", JSON.stringify(payload));
             showToast("TV Sent");
         }
 
@@ -634,3 +643,10 @@ import mqtt from 'mqtt';
         window.toggleColor = toggleColor;
         window.toggleCalib = toggleCalib;
 
+        // TV tab functions
+        window.switchTab = switchTab;
+        window.toggleTvColor = toggleTvColor;
+        window.toggleTvEffect = toggleTvEffect;
+        window.setTvColor = setTvColor;
+        window.setTvEffect = setTvEffect;
+        window.sendTvUpdate = sendTvUpdate;
