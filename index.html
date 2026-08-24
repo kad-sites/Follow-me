@@ -77,7 +77,7 @@
         }
 
         .section {
-            margin-bottom: 8px; margin-bottom: 4px; padding: 8px 16px; 
+            margin-bottom: 4px; margin-bottom: 4px; padding: 8px 16px; 
             background: var(--card);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -94,7 +94,7 @@
             margin-bottom: 4px;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 4px; /* Tighter margin */
+            margin-bottom: 2px; /* Tighter margin */
         }
 
         .section-title {
@@ -162,7 +162,7 @@
             display: grid;
             grid-template-columns: repeat(5, 1fr); /* 5 columns = 2 tight rows instead of 3 */
             gap: 6px;
-            margin-top: 8px;
+            margin-top: 4px;
         }
 
         .color-group-title { display: none; } /* Hide titles to save vertical space */
@@ -173,7 +173,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 2px;
             padding: 4px;
             border-radius: 8px;
             cursor: pointer;
@@ -303,7 +303,7 @@
         .gate-label {
             font-size: 10px;
             color: var(--subtext);
-            margin-top: 8px;
+            margin-top: 4px;
         }
         .apply-btn {
             background: rgba(20, 184, 166, 0.15);
@@ -429,7 +429,7 @@
             <input type="range" style="touch-action: pan-y;" id="followBrightness" min="0" max="255" value="255">
         </div>
         
-        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 8px 0;"></div>
+        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 4px 0;"></div>
 
         <div class="section-header">
             <div class="section-title">Base Brightness</div>
@@ -439,7 +439,7 @@
             <input type="range" style="touch-action: pan-y;" id="baseBrightness" min="0" max="255" value="0">
         </div>
 
-        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 8px 0;"></div>
+        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 4px 0;"></div>
 
         <div class="section-header">
             <div class="section-title">Follow Speed</div>
@@ -453,7 +453,7 @@
             </div>
         </div>
 
-        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 8px 0;"></div>
+        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 4px 0;"></div>
 
         <div class="section-header">
             <div class="section-title">Lead Distance</div>
@@ -467,7 +467,7 @@
             </div>
         </div>
 
-        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 8px 0;"></div>
+        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 4px 0;"></div>
 
         <div class="section-header">
             <div class="section-title">Glow Width</div>
@@ -481,7 +481,7 @@
             </div>
         </div>
         
-        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 8px 0;"></div>
+        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 4px 0;"></div>
 
         <div class="section-header">
             <div class="section-title">Fade Spread</div>
@@ -616,9 +616,9 @@
             </div>
             
             <div id="advPanel" style="display: none;">
-                <div style="display: flex; justify-content: flex-end; gap: 12px; font-size: 11px; margin-top: 8px;">
-                    <div style="display: flex; align-items: center; gap: 4px;"><div style="width:8px;height:8px;background:#3b82f6;border-radius:2px;"></div>Motion</div>
-                    <div style="display: flex; align-items: center; gap: 4px;"><div style="width:8px;height:8px;background:#14b8a6;border-radius:2px;"></div>Static</div>
+                <div style="display: flex; justify-content: flex-end; gap: 12px; font-size: 11px; margin-top: 4px;">
+                    <div style="display: flex; align-items: center; gap: 2px;"><div style="width:8px;height:8px;background:#3b82f6;border-radius:2px;"></div>Motion</div>
+                    <div style="display: flex; align-items: center; gap: 2px;"><div style="width:8px;height:8px;background:#14b8a6;border-radius:2px;"></div>Static</div>
                 </div>
                 <div class="eq-container" id="eqContainer">
                     <!-- EQ bars injected via JS -->
@@ -651,7 +651,7 @@
                 <input type="range" id="tvBrightness" min="0" max="255" value="30" style="touch-action: pan-y;">
             </div>
 
-            <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 8px 0;"></div>
+            <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 4px 0;"></div>
 
             <div class="section-header">
                 <div class="section-title">Effect Speed</div>
@@ -701,7 +701,7 @@
                     </button>
 
                 </div>
-                <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 8px 0;"></div>
+                <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 4px 0;"></div>
                 <div class="section-header">
                     <div class="section-title">White Temperature</div>
                     <div class="value-display" id="tvTempVal">Warm</div>
@@ -727,7 +727,7 @@
                 </div>
             </div>
             <div class="panel-content" id="tvEffectContent">
-                <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 8px;">
+                <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 4px;">
                     <button class="tv-effect-btn active" style="margin-top:0;" onclick="setTvEffect(this, 'solid')">Solid Color</button>
                     <button class="tv-effect-btn" style="margin-top:0;" onclick="setTvEffect(this, 'sweep')">Center-Out Sweep</button>
                     <button class="tv-effect-btn" style="margin-top:0;" onclick="setTvEffect(this, 'breathe')">Smooth Breathe</button>
