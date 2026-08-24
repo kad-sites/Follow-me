@@ -159,27 +159,56 @@ import mqtt from 'mqtt';
         }
 
         // Network Comms via MQTT
-        let storedMac = localStorage.getItem('DEVICE_MAC');
-        if (!storedMac) {
-            storedMac = prompt("Enter Device ID (MAC Address):", "3C8A1F0961D4") || "3C8A1F0961D4";
-            localStorage.setItem('DEVICE_MAC', storedMac);
-        }
-        const DEVICE_MAC = storedMac;
-        const TOPIC_STATUS = `followme/${DEVICE_MAC}/status`;
-        const TOPIC_RADAR = `followme/${DEVICE_MAC}/radar`;
-        const TOPIC_CMD = `followme/${DEVICE_MAC}/cmd`;
+        
+        let DEVICE_MAC = localStorage.getItem('DEVICE_MAC');
+        let TOPIC_STATUS, TOPIC_RADAR, TOPIC_CMD;
         
         const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
 
+        function initCorridorConnection() {
+            if (!DEVICE_MAC) {
+                const overlay = document.getElementById('mac-overlay');
+                if (overlay) overlay.style.display = 'flex';
+                return;
+            }
+            const overlay = document.getElementById('mac-overlay');
+            if (overlay) overlay.style.display = 'none';
+            
+            TOPIC_STATUS = `followme/${DEVICE_MAC}/status`;
+            TOPIC_RADAR = `followme/${DEVICE_MAC}/radar`;
+            TOPIC_CMD = `followme/${DEVICE_MAC}/cmd`;
+            
+            if (client.connected) {
+                client.subscribe(TOPIC_STATUS);
+                client.subscribe(TOPIC_RADAR);
+                sendUpdate({ request: "status" });
+            }
+        }
+
+        window.saveMac = function() {
+            const val = document.getElementById('macInput').value.trim();
+            if(val) {
+                DEVICE_MAC = val;
+                localStorage.setItem('DEVICE_MAC', DEVICE_MAC);
+                initCorridorConnection();
+            }
+        };
+
         client.on('connect', () => {
             console.log('Connected to HiveMQ Cloud');
-            client.subscribe(TOPIC_STATUS);
-            client.subscribe(TOPIC_RADAR);
+            if (DEVICE_MAC) {
+                initCorridorConnection();
+            }
             if(statusDot) statusDot.classList.add('connected');
+            const err = document.getElementById('connErrorMsg');
+            if (err) err.style.display = 'none';
             isConnected = true;
             showToast("Cloud Connected");
-            sendUpdate({ request: "status" });
         });
+
+        // call init on load
+        setTimeout(initCorridorConnection, 100);
+
 
         client.on('close', () => {
             if(statusDot) statusDot.classList.remove('connected');
@@ -521,7 +550,7 @@ import mqtt from 'mqtt';
             let currentMin = slider.min;
             let currentMax = slider.max;
             
-            let newMin = prompt("Enter Minimum Active Pixels:", currentMin);
+            let newMin = window.prompt("Enter Minimum Active Pixels:", currentMin);
             if (newMin !== null) {
                 newMin = parseInt(newMin);
                 if (!isNaN(newMin) && newMin > 0) {
@@ -530,7 +559,7 @@ import mqtt from 'mqtt';
                 }
             }
             
-            let newMax = prompt("Enter Maximum Active Pixels:", currentMax);
+            let newMax = window.prompt("Enter Maximum Active Pixels:", currentMax);
             if (newMax !== null) {
                 newMax = parseInt(newMax);
                 let currentSliderMin = parseInt(slider.min);
