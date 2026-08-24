@@ -29,7 +29,25 @@ import mqtt from 'mqtt';
         let tvPixels = 27;
         
         
-        function toggleTvPower() {
+        
+        document.getElementById('tvSpeed').addEventListener('input', (e) => {
+            tvSpeed = parseInt(e.target.value);
+            document.getElementById('tvSpeedVal').innerText = tvSpeed + '%';
+            if (isConnected) throttledTvUpdate();
+        });
+        document.getElementById('tvPixels').addEventListener('input', (e) => {
+            tvPixels = parseInt(e.target.value);
+            document.getElementById('tvPixelsVal').innerText = tvPixels;
+            if (isConnected) throttledTvUpdate();
+        });
+        
+        let tvTimeoutId;
+        function throttledTvUpdate() {
+            clearTimeout(tvTimeoutId);
+            tvTimeoutId = setTimeout(sendTvUpdate, 100);
+        }
+        
+function toggleTvPower() {
             tvPower = !tvPower;
             const btn = document.getElementById('tvPowerBtn');
             if (tvPower) {
