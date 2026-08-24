@@ -393,7 +393,16 @@
         input:focus + .slider { box-shadow: 0 0 1px #fbbf24; }
         input:checked + .slider:before { transform: translateX(20px); }
         .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-    </style>
+    
+        .panel-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .panel-content.open {
+            max-height: 500px; /* Big enough for content */
+        }
+</style>
 </head>
 <body>
 
@@ -679,12 +688,12 @@
             <div class="panel-header" onclick="toggleTvColor()">
                 <div class="section-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
                     <span>TV Color</span>
-                    <svg id="tvColorChevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.3s;">
+                    <svg id="tvColorChevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.3s; transform: rotate(180deg);">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                 </div>
             </div>
-            <div class="panel-content" id="tvColorContent">
+            <div class="panel-content open" id="tvColorContent">
                 <div class="color-grid" style="margin-top: 12px;">
                     <!-- Warm/Whites -->
                     <button class="color-btn tv-color-btn active" data-r="255" data-g="147" data-b="41" onclick="setTvColor(this, 255, 147, 41)">
