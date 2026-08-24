@@ -27,6 +27,10 @@ import mqtt from 'mqtt';
         let tvPower = true;
         let tvSpeed = 50;
         let tvPixels = 27;
+        let cSeg = 4;
+        let cSeqStr = "1, 2, 3, 4";
+        let cDel = 500;
+        let cAcc = false;
         
         
         
@@ -41,7 +45,26 @@ import mqtt from 'mqtt';
             if (isConnected) throttledTvUpdate();
         });
         
-        let tvTimeoutId;
+        
+        document.getElementById('cSeg').addEventListener('input', (e) => {
+            cSeg = parseInt(e.target.value);
+            document.getElementById('cSegVal').innerText = cSeg;
+            if (isConnected) throttledTvUpdate();
+        });
+        document.getElementById('cDel').addEventListener('input', (e) => {
+            cDel = parseInt(e.target.value);
+            document.getElementById('cDelVal').innerText = (cDel / 1000).toFixed(1) + 's';
+            if (isConnected) throttledTvUpdate();
+        });
+        document.getElementById('cAcc').addEventListener('change', (e) => {
+            cAcc = e.target.checked;
+            if (isConnected) throttledTvUpdate();
+        });
+        document.getElementById('cSeqStr').addEventListener('change', (e) => {
+            cSeqStr = e.target.value;
+            if (isConnected) throttledTvUpdate();
+        });
+let tvTimeoutId;
         function throttledTvUpdate() {
             clearTimeout(tvTimeoutId);
             tvTimeoutId = setTimeout(sendTvUpdate, 100);
@@ -299,13 +322,18 @@ function toggleTvPower() {
                         document.getElementById('tvSpeed').value = tvSpeed;
                         document.getElementById('tvSpeedVal').innerText = tvSpeed + '%';
                     }
-                    if (data.effect !== undefined) {
-                        tvEffect = data.effect;
-                        document.querySelectorAll('.tv-effect-btn').forEach(el => el.classList.remove('active'));
-                        // Very basic matching for UI update
-                        document.querySelectorAll('.tv-effect-btn').forEach(btn => {
-                            if (btn.getAttribute('onclick').includes(tvEffect)) btn.classList.add('active');
-                        });
+                                      if (data.effect !== undefined) {
+                      tvEffect = data.effect;
+                      document.querySelectorAll('.tv-effect-btn').forEach(btn => {
+                          if (btn.textContent.toLowerCase().includes(tvEffect)) btn.classList.add('active');
+                          else btn.classList.remove('active');
+                      });
+                      if (tvEffect === 'custom') {
+                          document.getElementById('customSeqPanel').style.display = 'block';
+                      } else {
+                          document.getElementById('customSeqPanel').style.display = 'none';
+                      }
+                  });
                     }
                     if (data.r !== undefined && data.g !== undefined && data.b !== undefined) {
                         tvColor = {r: data.r, g: data.g, b: data.b};
