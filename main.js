@@ -32,12 +32,12 @@ import mqtt from 'mqtt';
             tvPower = !tvPower;
             const btn = document.getElementById('tvPowerBtn');
             if (tvPower) {
-                btn.innerText = "TURN OFF";
+                btn.innerText = "ON";
                 btn.style.color = "#10b981";
                 btn.style.background = "rgba(16, 185, 129, 0.15)";
                 btn.style.borderColor = "rgba(16, 185, 129, 0.3)";
             } else {
-                btn.innerText = "TURN ON";
+                btn.innerText = "OFF";
                 btn.style.color = "#ef4444";
                 btn.style.background = "rgba(239, 68, 68, 0.15)";
                 btn.style.borderColor = "rgba(239, 68, 68, 0.3)";
