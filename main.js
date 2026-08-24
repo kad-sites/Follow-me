@@ -46,6 +46,7 @@ import mqtt from 'mqtt';
         }
 
         function switchTab(tabId) {
+            localStorage.setItem('activeTab', tabId);
             document.querySelectorAll('.tab-content').forEach(el => {
                 el.classList.remove('active');
                 el.style.display = 'none';
@@ -105,7 +106,7 @@ import mqtt from 'mqtt';
                 g: tvColor.g,
                 b: tvColor.b
             };
-            client.publish("kad/tvbacklit/cmd/zoheb", JSON.stringify(payload));
+            client.publish("kad/tvbacklit/cmd/zoheb", JSON.stringify(payload), { retain: true });
             showToast("TV Sent");
         }
 
@@ -230,6 +231,7 @@ import mqtt from 'mqtt';
             if (DEVICE_MAC) {
                 initCorridorConnection();
             }
+            client.subscribe("kad/tvbacklit/cmd/zoheb");
             if(statusDot) statusDot.classList.add('connected');
             const err = document.getElementById('connErrorMsg');
             if (err) err.style.display = 'none';
@@ -250,6 +252,46 @@ import mqtt from 'mqtt';
         client.on('message', (topic, message) => {
             try {
                 const data = JSON.parse(message.toString());
+                if (topic === "kad/tvbacklit/cmd/zoheb") {
+                    if (data.state !== undefined) {
+                        tvPower = (data.state === "ON");
+                        const btn = document.getElementById('tvPowerBtn');
+                        if (tvPower) {
+                            btn.innerText = "ON";
+                            btn.style.color = "#10b981";
+                            btn.style.background = "rgba(16, 185, 129, 0.15)";
+                            btn.style.borderColor = "rgba(16, 185, 129, 0.3)";
+                        } else {
+                            btn.innerText = "OFF";
+                            btn.style.color = "#ef4444";
+                            btn.style.background = "rgba(239, 68, 68, 0.15)";
+                            btn.style.borderColor = "rgba(239, 68, 68, 0.3)";
+                        }
+                    }
+                    if (data.brightness !== undefined) {
+                        document.getElementById('tvBrightness').value = data.brightness;
+                        document.getElementById('tvBrightVal').innerText = Math.round((data.brightness / 255) * 100) + '%';
+                    }
+                    if (data.speed !== undefined) {
+                        tvSpeed = data.speed;
+                        document.getElementById('tvSpeed').value = tvSpeed;
+                        document.getElementById('tvSpeedVal').innerText = tvSpeed + '%';
+                    }
+                    if (data.effect !== undefined) {
+                        tvEffect = data.effect;
+                        document.querySelectorAll('.tv-effect-btn').forEach(el => el.classList.remove('active'));
+                        // Very basic matching for UI update
+                        document.querySelectorAll('.tv-effect-btn').forEach(btn => {
+                            if (btn.getAttribute('onclick').includes(tvEffect)) btn.classList.add('active');
+                        });
+                    }
+                    if (data.r !== undefined && data.g !== undefined && data.b !== undefined) {
+                        tvColor = {r: data.r, g: data.g, b: data.b};
+                        document.getElementById('tvColorChevron').parentElement.parentElement.style.borderLeftColor = `rgb(${data.r},${data.g},${data.b})`;
+                    }
+                    return;
+                }
+                
                 if (topic === TOPIC_STATUS) {
                     if(data.followBrightness !== undefined) fBrightSlider.value = data.followBrightness;
                     if(data.baseBrightness !== undefined) bBrightSlider.value = data.baseBrightness;
@@ -657,3 +699,9 @@ import mqtt from 'mqtt';
         window.setTvEffect = setTvEffect;
         window.sendTvUpdate = sendTvUpdate;
         window.toggleTvPower = toggleTvPower;
+
+        // Restore tab on load
+        const savedTab = localStorage.getItem('activeTab');
+        if (savedTab) {
+            switchTab(savedTab);
+        }
