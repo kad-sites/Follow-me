@@ -306,7 +306,43 @@
             background: rgba(20, 184, 166, 0.3);
             transform: scale(0.98);
         }
-    </style>
+    
+        .tabs {
+            display: flex;
+            max-width: 450px;
+            width: 100%;
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            color: var(--subtext);
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent);
+        }
+        .tab-content {
+            display: none;
+            width: 100%;
+            max-width: 450px;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .tab-content.active {
+            display: flex;
+        }
+</style>
 </head>
 <body>
 
@@ -317,6 +353,13 @@
         </div>
         <div id="connErrorMsg" style="color: #ef4444; font-size: 11px; display: block; opacity: 0.8; text-align: right;">Unable to connect to controller</div>
     </div>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('corridor')">Corridor (Radar)</button>
+        <button class="tab-btn" onclick="switchTab('tv')">TV Backlight</button>
+    </div>
+
+    <!-- TAB 1: CORRIDOR (Original Code) -->
+    <div id="tab-corridor" class="tab-content active">
 
     <!-- Main Controls -->
     <div class="section">
