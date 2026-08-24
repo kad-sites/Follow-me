@@ -171,6 +171,14 @@ function toggleTvPower() {
                 g: tvColor.g,
                 b: tvColor.b
             };
+            
+            if (tvEffect === 'custom') {
+                payload.c_seg = cSeg;
+                payload.c_del = cDel;
+                payload.c_acc = cAcc;
+                payload.c_seq = cSeqStr.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+            }
+            
             client.publish("kad/tvbacklit/cmd/zoheb", JSON.stringify(payload), { retain: true });
             showToast("TV Sent");
         }
