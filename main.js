@@ -333,8 +333,7 @@ function toggleTvPower() {
                       } else {
                           document.getElementById('customSeqPanel').style.display = 'none';
                       }
-                  });
-                    }
+                  }
                     if (data.r !== undefined && data.g !== undefined && data.b !== undefined) {
                         tvColor = {r: data.r, g: data.g, b: data.b};
                         document.getElementById('tvColorChevron').parentElement.parentElement.style.borderLeftColor = `rgb(${data.r},${data.g},${data.b})`;
