@@ -92,7 +92,7 @@ import mqtt from 'mqtt';
         const statusDot = document.getElementById('statusDot');
         const fBrightSlider = document.getElementById('followBrightness');
         const bBrightSlider = document.getElementById('baseBrightness');
-        const speedSlider = document.getElementById('speed');
+        const speedSlider = document.getElementById('followSpeed');
         const leadSlider = document.getElementById('leadFactor');
         const glowSlider = document.getElementById('glowSize');
         const fadeSlider = document.getElementById('fadeSigma');
@@ -245,22 +245,7 @@ import mqtt from 'mqtt';
 
                     updateUI();
 
-        document.getElementById('tvBrightness').addEventListener('input', (e) => {
-            const v = e.target.value;
-            const pct = Math.round((v / 255) * 100);
-            document.getElementById('tvBrightVal').innerText = pct + '%';
-            
-            // gradient logic
-            const min = e.target.min || 0;
-            const max = e.target.max || 100;
-            const val = e.target.value;
-            const percentage = ((val - min) / (max - min)) * 100;
-            e.target.style.background = `linear-gradient(to right, rgb(${tvColor.r}, ${tvColor.g}, ${tvColor.b}) ${percentage}%, #333 ${percentage}%)`;
-        });
 
-        document.getElementById('tvBrightness').addEventListener('change', () => {
-            sendTvUpdate();
-        });
 
                 } else if (topic === TOPIC_RADAR) {
                     if(data.minDist !== undefined) minDistSlider.value = data.minDist;
@@ -450,30 +435,15 @@ import mqtt from 'mqtt';
             { el: offsetSlider, key: 'sensorOffset' }
         ];
 
-        sliders.forEach(s => {
-            s.el.addEventListener('input', () => {
-                updateUI();
-
-        document.getElementById('tvBrightness').addEventListener('input', (e) => {
-            const v = e.target.value;
-            const pct = Math.round((v / 255) * 100);
-            document.getElementById('tvBrightVal').innerText = pct + '%';
-            
-            // gradient logic
-            const min = e.target.min || 0;
-            const max = e.target.max || 100;
-            const val = e.target.value;
-            const percentage = ((val - min) / (max - min)) * 100;
-            e.target.style.background = `linear-gradient(to right, rgb(${tvColor.r}, ${tvColor.g}, ${tvColor.b}) ${percentage}%, #333 ${percentage}%)`;
+                sliders.forEach(s => {
+            if (s.el) {
+                s.el.addEventListener('input', () => {
+                    updateUI();
+                    throttledUpdate({ [s.key]: parseInt(s.el.value) });
+                });
+            }
         });
 
-        document.getElementById('tvBrightness').addEventListener('change', () => {
-            sendTvUpdate();
-        });
-
-            });
-        });
-        
         // Add live "change" listeners to all dropdown sliders so they send immediately
         const liveSliders = [
             { el: pixelsSlider, key: 'activePixels' },
@@ -511,22 +481,7 @@ import mqtt from 'mqtt';
             }
             updateUI();
 
-        document.getElementById('tvBrightness').addEventListener('input', (e) => {
-            const v = e.target.value;
-            const pct = Math.round((v / 255) * 100);
-            document.getElementById('tvBrightVal').innerText = pct + '%';
-            
-            // gradient logic
-            const min = e.target.min || 0;
-            const max = e.target.max || 100;
-            const val = e.target.value;
-            const percentage = ((val - min) / (max - min)) * 100;
-            e.target.style.background = `linear-gradient(to right, rgb(${tvColor.r}, ${tvColor.g}, ${tvColor.b}) ${percentage}%, #333 ${percentage}%)`;
-        });
 
-        document.getElementById('tvBrightness').addEventListener('change', () => {
-            sendTvUpdate();
-        });
 
             showToast("Color Sent to " + colorTarget);
         }
@@ -579,22 +534,7 @@ import mqtt from 'mqtt';
             }
             updateUI();
 
-        document.getElementById('tvBrightness').addEventListener('input', (e) => {
-            const v = e.target.value;
-            const pct = Math.round((v / 255) * 100);
-            document.getElementById('tvBrightVal').innerText = pct + '%';
-            
-            // gradient logic
-            const min = e.target.min || 0;
-            const max = e.target.max || 100;
-            const val = e.target.value;
-            const percentage = ((val - min) / (max - min)) * 100;
-            e.target.style.background = `linear-gradient(to right, rgb(${tvColor.r}, ${tvColor.g}, ${tvColor.b}) ${percentage}%, #333 ${percentage}%)`;
-        });
 
-        document.getElementById('tvBrightness').addEventListener('change', () => {
-            sendTvUpdate();
-        });
 
         }
         
@@ -637,6 +577,24 @@ import mqtt from 'mqtt';
                 panel.style.display = 'none';
                 arrow.innerHTML = '&#9660;';
             }
+        }
+
+        
+        const tvBrightEl = document.getElementById('tvBrightness');
+        if (tvBrightEl) {
+            tvBrightEl.addEventListener('input', (e) => {
+                const v = e.target.value;
+                const pct = Math.round((v / 255) * 100);
+                document.getElementById('tvBrightVal').innerText = pct + '%';
+                
+                const min = e.target.min || 0;
+                const max = e.target.max || 100;
+                const percentage = ((v - min) / (max - min)) * 100;
+                e.target.style.background = `linear-gradient(to right, rgb(${tvColor.r}, ${tvColor.g}, ${tvColor.b}) ${percentage}%, #333 ${percentage}%)`;
+            });
+            tvBrightEl.addEventListener('change', () => {
+                sendTvUpdate();
+            });
         }
 
         window.toggleRadar = toggleRadar;
