@@ -26,6 +26,7 @@ import mqtt from 'mqtt';
         let tvEffect = 'solid';
         let tvPower = true;
         let tvSpeed = 50;
+        let tvPixels = 27;
         
         
         function toggleTvPower() {
@@ -103,6 +104,7 @@ import mqtt from 'mqtt';
                 state: tvPower ? "ON" : "OFF",
                 effect: tvEffect,
                 speed: tvSpeed,
+                pixels: tvPixels,
                 brightness: b,
                 r: tvColor.r,
                 g: tvColor.g,
