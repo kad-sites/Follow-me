@@ -815,3 +815,16 @@ function toggleTvPower() {
         if (savedTab) {
             switchTab(savedTab);
         }
+
+
+        window.saveTvSettings = function() {
+            if (!isConnected) {
+                showToast("Not Connected to Cloud!");
+                return;
+            }
+            const payload = {
+                save: true
+            };
+            client.publish("kad/tvbacklit/cmd/zoheb", JSON.stringify(payload));
+            showToast("Settings Saved to Device Memory!");
+        };
