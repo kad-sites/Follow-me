@@ -675,15 +675,7 @@ function toggleTvPower() {
 
         // Add live "change" listeners to all dropdown sliders so they send immediately
         const liveSliders = [
-              { el: document.getElementById('vlb'), key: 'vlb' },
-              { el: document.getElementById('vlt'), key: 'vlt' },
-              { el: document.getElementById('vrb'), key: 'vrb' },
-              { el: document.getElementById('vrt'), key: 'vrt' },
-              { el: document.getElementById('vlb'), key: 'vlb' },
-              { el: document.getElementById('vlt'), key: 'vlt' },
-              { el: document.getElementById('vrb'), key: 'vrb' },
-              { el: document.getElementById('vrt'), key: 'vrt' },
-            { el: pixelsSlider, key: 'activePixels' },
+              { el: pixelsSlider, key: 'activePixels' },
             { el: densitySlider, key: 'ledDensity' },
             { el: offsetSlider, key: 'sensorOffset' },
             { el: minDistSlider, key: 'minDist' },
@@ -706,7 +698,22 @@ function toggleTvPower() {
             }
         });
 
-        // Color Selection
+        
+          // VU Meter Sliders (TV)
+          ['vlb', 'vlt', 'vrb', 'vrt'].forEach(id => {
+              const el = document.getElementById(id);
+              if (el) {
+                  el.addEventListener('input', (e) => {
+                      const valDisplay = document.getElementById(id + 'Val');
+                      if (valDisplay) valDisplay.innerText = e.target.value;
+                  });
+                  el.addEventListener('change', () => {
+                      sendTvUpdate();
+                  });
+              }
+          });
+
+          // Color Selection
         window.selectColor = function(name, r, g, b, uiHex) {
             setActiveColorBtn(name);
             if (colorTarget === 'follow') {
