@@ -163,7 +163,15 @@ function toggleTvPower() {
         function setTvEffect(btn, effect) {
             document.querySelectorAll('.tv-effect-btn').forEach(el => el.classList.remove('active'));
             if(btn) btn.classList.add('active');
-            tvEffect = effect;
+              tvEffect = effect;
+              let lbl = document.getElementById('speedLabel');
+              if (lbl) {
+                  if (effect === 'music_pulse' || effect === 'music_meter') {
+                      lbl.innerText = 'Audio Sensitivity';
+                  } else {
+                      lbl.innerText = 'Effect Speed';
+                  }
+              }
             sendTvUpdate();
         }
 
