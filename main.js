@@ -843,3 +843,25 @@ function toggleTvPower() {
             client.publish("kad/tvbacklit/cmd/zoheb", JSON.stringify(payload));
             showToast("Settings Saved to Device Memory!");
         };
+
+
+document.addEventListener('click', function(event) {
+    const colorPanel = document.getElementById('tvColorContent') ? document.getElementById('tvColorContent').closest('.dropdown-panel') : null;
+    const effectPanel = document.getElementById('tvEffectContent') ? document.getElementById('tvEffectContent').closest('.dropdown-panel') : null;
+    
+    if (colorPanel && !colorPanel.contains(event.target)) {
+        const content = document.getElementById('tvColorContent');
+        if (content.classList.contains('open')) {
+            content.classList.remove('open');
+            document.getElementById('tvColorChevron').style.transform = 'rotate(0deg)';
+        }
+    }
+    
+    if (effectPanel && !effectPanel.contains(event.target)) {
+        const content = document.getElementById('tvEffectContent');
+        if (content.classList.contains('open')) {
+            content.classList.remove('open');
+            document.getElementById('tvEffectChevron').style.transform = 'rotate(0deg)';
+        }
+    }
+});
