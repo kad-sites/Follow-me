@@ -186,6 +186,16 @@ function toggleTvPower() {
                 speed: tvSpeed,
                 pixels: tvPixels,
                 brightness: b,
+                vlb: parseInt(document.getElementById('vlb') ? document.getElementById('vlb').value : 0),
+                vlt: parseInt(document.getElementById('vlt') ? document.getElementById('vlt').value : 50),
+                vrb: parseInt(document.getElementById('vrb') ? document.getElementById('vrb').value : 150),
+                vrt: parseInt(document.getElementById('vrt') ? document.getElementById('vrt').value : 100),
+
+                vlb: parseInt(document.getElementById('vlb') ? document.getElementById('vlb').value : 0),
+                vlt: parseInt(document.getElementById('vlt') ? document.getElementById('vlt').value : 50),
+                vrb: parseInt(document.getElementById('vrb') ? document.getElementById('vrb').value : 150),
+                vrt: parseInt(document.getElementById('vrt') ? document.getElementById('vrt').value : 100),
+
                 r: tvColor.r,
                 g: tvColor.g,
                 b: tvColor.b
@@ -404,9 +414,15 @@ function toggleTvPower() {
                       });
                       if (tvEffect === 'custom') {
                           document.getElementById('customSeqPanel').style.display = 'block';
+                        } else if (tvEffect === 'music_meter' && document.getElementById('vuCalibPanel')) {
+                            document.getElementById('vuCalibPanel').style.display = 'block';
+                        } else if (tvEffect === 'music_meter' && document.getElementById('vuCalibPanel')) {
+                            document.getElementById('vuCalibPanel').style.display = 'block';
                           document.getElementById('effectSpeedBlock').style.display = 'none';
                       } else {
                           document.getElementById('customSeqPanel').style.display = 'none';
+                        if(document.getElementById('vuCalibPanel')) document.getElementById('vuCalibPanel').style.display = 'none';
+                        if(document.getElementById('vuCalibPanel')) document.getElementById('vuCalibPanel').style.display = 'none';
                           document.getElementById('effectSpeedBlock').style.display = 'block';
                       }
                   }
@@ -432,7 +448,19 @@ function toggleTvPower() {
                     if(data.bR !== undefined) baseColorHex = `rgb(${data.bR},${data.bG},${data.bB})`;
                     // color mode active button logic skipped for simplicity when splitting targets
 
-                    updateUI();
+                    
+                      if(data.vlb !== undefined && document.getElementById('vlb')) document.getElementById('vlb').value = data.vlb;
+                      if(data.vlt !== undefined && document.getElementById('vlt')) document.getElementById('vlt').value = data.vlt;
+                      if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
+                      if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
+
+                      
+                      if(data.vlb !== undefined && document.getElementById('vlb')) document.getElementById('vlb').value = data.vlb;
+                      if(data.vlt !== undefined && document.getElementById('vlt')) document.getElementById('vlt').value = data.vlt;
+                      if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
+                      if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
+
+                      updateUI();
 
 
 
@@ -627,7 +655,19 @@ function toggleTvPower() {
                 sliders.forEach(s => {
             if (s.el) {
                 s.el.addEventListener('input', () => {
-                    updateUI();
+                    
+                      if(data.vlb !== undefined && document.getElementById('vlb')) document.getElementById('vlb').value = data.vlb;
+                      if(data.vlt !== undefined && document.getElementById('vlt')) document.getElementById('vlt').value = data.vlt;
+                      if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
+                      if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
+
+                      
+                      if(data.vlb !== undefined && document.getElementById('vlb')) document.getElementById('vlb').value = data.vlb;
+                      if(data.vlt !== undefined && document.getElementById('vlt')) document.getElementById('vlt').value = data.vlt;
+                      if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
+                      if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
+
+                      updateUI();
                     throttledUpdate({ [s.key]: parseInt(s.el.value) });
                 });
             }
@@ -635,6 +675,14 @@ function toggleTvPower() {
 
         // Add live "change" listeners to all dropdown sliders so they send immediately
         const liveSliders = [
+              { el: document.getElementById('vlb'), key: 'vlb' },
+              { el: document.getElementById('vlt'), key: 'vlt' },
+              { el: document.getElementById('vrb'), key: 'vrb' },
+              { el: document.getElementById('vrt'), key: 'vrt' },
+              { el: document.getElementById('vlb'), key: 'vlb' },
+              { el: document.getElementById('vlt'), key: 'vlt' },
+              { el: document.getElementById('vrb'), key: 'vrb' },
+              { el: document.getElementById('vrt'), key: 'vrt' },
             { el: pixelsSlider, key: 'activePixels' },
             { el: densitySlider, key: 'ledDensity' },
             { el: offsetSlider, key: 'sensorOffset' },
@@ -668,7 +716,19 @@ function toggleTvPower() {
                 baseColorHex = uiHex;
                 sendUpdate({ bR: r, bG: g, bB: b });
             }
-            updateUI();
+            
+                      if(data.vlb !== undefined && document.getElementById('vlb')) document.getElementById('vlb').value = data.vlb;
+                      if(data.vlt !== undefined && document.getElementById('vlt')) document.getElementById('vlt').value = data.vlt;
+                      if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
+                      if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
+
+                      
+                      if(data.vlb !== undefined && document.getElementById('vlb')) document.getElementById('vlb').value = data.vlb;
+                      if(data.vlt !== undefined && document.getElementById('vlt')) document.getElementById('vlt').value = data.vlt;
+                      if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
+                      if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
+
+                      updateUI();
 
 
 
@@ -721,7 +781,19 @@ function toggleTvPower() {
                     document.getElementById('pixelsMaxLabel').innerText = newMax;
                 }
             }
-            updateUI();
+            
+                      if(data.vlb !== undefined && document.getElementById('vlb')) document.getElementById('vlb').value = data.vlb;
+                      if(data.vlt !== undefined && document.getElementById('vlt')) document.getElementById('vlt').value = data.vlt;
+                      if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
+                      if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
+
+                      
+                      if(data.vlb !== undefined && document.getElementById('vlb')) document.getElementById('vlb').value = data.vlb;
+                      if(data.vlt !== undefined && document.getElementById('vlt')) document.getElementById('vlt').value = data.vlt;
+                      if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
+                      if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
+
+                      updateUI();
 
 
 

@@ -544,7 +544,7 @@
                 <div class="value-display" id="pixelsVal">150</div>
             </div>
             <div class="slider-container">
-                <input type="range" style="touch-action: pan-y;" id="activePixels" min="1" max="300" value="150">
+                <input type="range" style="touch-action: pan-y;" id="activePixels" min="1" max="500" value="150">
                 <div class="slider-labels">
                     <span id="pixelsMinLabel">1</span>
                     <span id="pixelsMaxLabel">300</span>
@@ -671,7 +671,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <span style="font-size: 13px; font-weight: 500; color: var(--text);">Pixels</span>
-                    <input type="number" id="tvPixels" min="10" max="300" value="27" style="width: 52px; height: 32px; padding: 0; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 13px; font-weight: bold; font-family: inherit; text-align: center; -moz-appearance: textfield; box-sizing: border-box;">
+                    <input type="number" id="tvPixels" min="10" max="500" value="27" style="width: 52px; height: 32px; padding: 0; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 13px; font-weight: bold; font-family: inherit; text-align: center; -moz-appearance: textfield; box-sizing: border-box;">
                 </div>
                 <button id="tvPowerBtn" onclick="toggleTvPower()" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px; height: 32px; padding: 0 20px; font-size: 13px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-sizing: border-box;">
                     ON
@@ -789,7 +789,43 @@
             </div>
         </div>
         
-        <div class="section" id="customSeqPanel" style="display: none; padding: 12px 16px; margin-top: 8px;">
+        
+          <div class="section" id="vuCalibPanel" style="display: none; padding: 12px 16px; margin-top: 8px;">
+              <div class="section-title">VU Meter Calibration</div>
+              <div style="font-size: 11px; color: var(--subtext); margin-bottom: 12px;">Map the physical corners of your TV strip.</div>
+
+              <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px;"><span style="color:var(--subtext)">Left Bottom</span><span id="vlbVal" style="color:#fff">0</span></div>
+              <input type="range" id="vlb" min="0" max="500" value="0" style="width: 100%; margin-bottom: 12px;">
+              
+              <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px;"><span style="color:var(--subtext)">Left Top</span><span id="vltVal" style="color:#fff">50</span></div>
+              <input type="range" id="vlt" min="0" max="500" value="50" style="width: 100%; margin-bottom: 12px;">
+
+              <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px;"><span style="color:var(--subtext)">Right Bottom</span><span id="vrbVal" style="color:#fff">150</span></div>
+              <input type="range" id="vrb" min="0" max="500" value="150" style="width: 100%; margin-bottom: 12px;">
+
+              <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px;"><span style="color:var(--subtext)">Right Top</span><span id="vrtVal" style="color:#fff">100</span></div>
+              <input type="range" id="vrt" min="0" max="500" value="100" style="width: 100%; margin-bottom: 12px;">
+          </div>
+
+          
+          <div class="section" id="vuCalibPanel" style="display: none; padding: 12px 16px; margin-top: 8px;">
+              <div class="section-title">VU Meter Calibration</div>
+              <div style="font-size: 11px; color: var(--subtext); margin-bottom: 12px;">Map the physical corners of your TV strip.</div>
+
+              <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px;"><span style="color:var(--subtext)">Left Bottom</span><span id="vlbVal" style="color:#fff">0</span></div>
+              <input type="range" id="vlb" min="0" max="500" value="0" style="width: 100%; margin-bottom: 12px;">
+              
+              <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px;"><span style="color:var(--subtext)">Left Top</span><span id="vltVal" style="color:#fff">50</span></div>
+              <input type="range" id="vlt" min="0" max="500" value="50" style="width: 100%; margin-bottom: 12px;">
+
+              <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px;"><span style="color:var(--subtext)">Right Bottom</span><span id="vrbVal" style="color:#fff">150</span></div>
+              <input type="range" id="vrb" min="0" max="500" value="150" style="width: 100%; margin-bottom: 12px;">
+
+              <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px;"><span style="color:var(--subtext)">Right Top</span><span id="vrtVal" style="color:#fff">100</span></div>
+              <input type="range" id="vrt" min="0" max="500" value="100" style="width: 100%; margin-bottom: 12px;">
+          </div>
+
+          <div class="section" id="customSeqPanel" style="display: none; padding: 12px 16px; margin-top: 8px;">
             <div class="section-title">Animation Studio</div>
             
             <div style="display: flex; justify-content: space-between; font-size: 11px; margin-top: 12px; margin-bottom: 4px;">
