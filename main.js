@@ -384,7 +384,12 @@ function toggleTvPower() {
                                       if (data.effect !== undefined) {
                       tvEffect = data.effect;
                       document.querySelectorAll('.tv-effect-btn').forEach(btn => {
-                          if (btn.textContent.toLowerCase().includes(tvEffect)) btn.classList.add('active');
+                          let t = btn.textContent.toLowerCase();
+                          let match = false;
+                          if (tvEffect === 'music_pulse' && t.includes('pulse')) match = true;
+                          else if (tvEffect === 'music_meter' && t.includes('meter')) match = true;
+                          else if (tvEffect !== 'music_pulse' && tvEffect !== 'music_meter' && t.includes(tvEffect)) match = true;
+                          if (match) btn.classList.add('active');
                           else btn.classList.remove('active');
                       });
                       if (tvEffect === 'custom') {
