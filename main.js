@@ -191,10 +191,20 @@ function toggleTvPower() {
                 vrb: parseInt(document.getElementById('vrb') ? document.getElementById('vrb').value : 150),
                 vrt: parseInt(document.getElementById('vrt') ? document.getElementById('vrt').value : 100),
 
+                vuGY: parseInt(document.getElementById('vuGY') ? document.getElementById('vuGY').value : 32),
+                vuYR: parseInt(document.getElementById('vuYR') ? document.getElementById('vuYR').value : 66),
+                vuDrop: document.getElementById('vuDrop') ? document.getElementById('vuDrop').checked : true,
+
+
                 vlb: parseInt(document.getElementById('vlb') ? document.getElementById('vlb').value : 0),
                 vlt: parseInt(document.getElementById('vlt') ? document.getElementById('vlt').value : 50),
                 vrb: parseInt(document.getElementById('vrb') ? document.getElementById('vrb').value : 150),
                 vrt: parseInt(document.getElementById('vrt') ? document.getElementById('vrt').value : 100),
+
+                vuGY: parseInt(document.getElementById('vuGY') ? document.getElementById('vuGY').value : 32),
+                vuYR: parseInt(document.getElementById('vuYR') ? document.getElementById('vuYR').value : 66),
+                vuDrop: document.getElementById('vuDrop') ? document.getElementById('vuDrop').checked : true,
+
 
                 r: tvColor.r,
                 g: tvColor.g,
@@ -454,11 +464,21 @@ function toggleTvPower() {
                       if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
                       if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
 
+                      if(data.vuGY !== undefined && document.getElementById('vuGY')) document.getElementById('vuGY').value = data.vuGY;
+                      if(data.vuYR !== undefined && document.getElementById('vuYR')) document.getElementById('vuYR').value = data.vuYR;
+                      if(data.vuDrop !== undefined && document.getElementById('vuDrop')) document.getElementById('vuDrop').checked = data.vuDrop;
+
+
                       
                       if(data.vlb !== undefined && document.getElementById('vlb')) document.getElementById('vlb').value = data.vlb;
                       if(data.vlt !== undefined && document.getElementById('vlt')) document.getElementById('vlt').value = data.vlt;
                       if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
                       if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
+
+                      if(data.vuGY !== undefined && document.getElementById('vuGY')) document.getElementById('vuGY').value = data.vuGY;
+                      if(data.vuYR !== undefined && document.getElementById('vuYR')) document.getElementById('vuYR').value = data.vuYR;
+                      if(data.vuDrop !== undefined && document.getElementById('vuDrop')) document.getElementById('vuDrop').checked = data.vuDrop;
+
 
                       updateUI();
 
@@ -661,11 +681,21 @@ function toggleTvPower() {
                       if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
                       if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
 
+                      if(data.vuGY !== undefined && document.getElementById('vuGY')) document.getElementById('vuGY').value = data.vuGY;
+                      if(data.vuYR !== undefined && document.getElementById('vuYR')) document.getElementById('vuYR').value = data.vuYR;
+                      if(data.vuDrop !== undefined && document.getElementById('vuDrop')) document.getElementById('vuDrop').checked = data.vuDrop;
+
+
                       
                       if(data.vlb !== undefined && document.getElementById('vlb')) document.getElementById('vlb').value = data.vlb;
                       if(data.vlt !== undefined && document.getElementById('vlt')) document.getElementById('vlt').value = data.vlt;
                       if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
                       if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
+
+                      if(data.vuGY !== undefined && document.getElementById('vuGY')) document.getElementById('vuGY').value = data.vuGY;
+                      if(data.vuYR !== undefined && document.getElementById('vuYR')) document.getElementById('vuYR').value = data.vuYR;
+                      if(data.vuDrop !== undefined && document.getElementById('vuDrop')) document.getElementById('vuDrop').checked = data.vuDrop;
+
 
                       updateUI();
                     throttledUpdate({ [s.key]: parseInt(s.el.value) });
@@ -700,7 +730,7 @@ function toggleTvPower() {
 
         
           // VU Meter Sliders (TV)
-          ['vlb', 'vlt', 'vrb', 'vrt'].forEach(id => {
+          ['vlb', 'vlt', 'vrb', 'vrt', 'vuGY', 'vuYR'].forEach(id => {
               const el = document.getElementById(id);
               if (el) {
                   el.addEventListener('input', (e) => {
@@ -729,11 +759,21 @@ function toggleTvPower() {
                       if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
                       if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
 
+                      if(data.vuGY !== undefined && document.getElementById('vuGY')) document.getElementById('vuGY').value = data.vuGY;
+                      if(data.vuYR !== undefined && document.getElementById('vuYR')) document.getElementById('vuYR').value = data.vuYR;
+                      if(data.vuDrop !== undefined && document.getElementById('vuDrop')) document.getElementById('vuDrop').checked = data.vuDrop;
+
+
                       
                       if(data.vlb !== undefined && document.getElementById('vlb')) document.getElementById('vlb').value = data.vlb;
                       if(data.vlt !== undefined && document.getElementById('vlt')) document.getElementById('vlt').value = data.vlt;
                       if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
                       if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
+
+                      if(data.vuGY !== undefined && document.getElementById('vuGY')) document.getElementById('vuGY').value = data.vuGY;
+                      if(data.vuYR !== undefined && document.getElementById('vuYR')) document.getElementById('vuYR').value = data.vuYR;
+                      if(data.vuDrop !== undefined && document.getElementById('vuDrop')) document.getElementById('vuDrop').checked = data.vuDrop;
+
 
                       updateUI();
 
@@ -794,11 +834,21 @@ function toggleTvPower() {
                       if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
                       if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
 
+                      if(data.vuGY !== undefined && document.getElementById('vuGY')) document.getElementById('vuGY').value = data.vuGY;
+                      if(data.vuYR !== undefined && document.getElementById('vuYR')) document.getElementById('vuYR').value = data.vuYR;
+                      if(data.vuDrop !== undefined && document.getElementById('vuDrop')) document.getElementById('vuDrop').checked = data.vuDrop;
+
+
                       
                       if(data.vlb !== undefined && document.getElementById('vlb')) document.getElementById('vlb').value = data.vlb;
                       if(data.vlt !== undefined && document.getElementById('vlt')) document.getElementById('vlt').value = data.vlt;
                       if(data.vrb !== undefined && document.getElementById('vrb')) document.getElementById('vrb').value = data.vrb;
                       if(data.vrt !== undefined && document.getElementById('vrt')) document.getElementById('vrt').value = data.vrt;
+
+                      if(data.vuGY !== undefined && document.getElementById('vuGY')) document.getElementById('vuGY').value = data.vuGY;
+                      if(data.vuYR !== undefined && document.getElementById('vuYR')) document.getElementById('vuYR').value = data.vuYR;
+                      if(data.vuDrop !== undefined && document.getElementById('vuDrop')) document.getElementById('vuDrop').checked = data.vuDrop;
+
 
                       updateUI();
 
