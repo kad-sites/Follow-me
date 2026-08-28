@@ -168,8 +168,10 @@ function toggleTvPower() {
               if (lbl) {
                   if (effect === 'music_pulse' || effect === 'music_meter') {
                       lbl.innerText = 'Audio Sensitivity';
+                      if (document.getElementById('tvTempBlock')) document.getElementById('tvTempBlock').style.display = 'none';
                   } else {
                       lbl.innerText = 'Effect Speed';
+                      if (document.getElementById('tvTempBlock')) document.getElementById('tvTempBlock').style.display = 'block';
                   }
               }
             sendTvUpdate();
