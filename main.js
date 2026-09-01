@@ -308,8 +308,11 @@ function toggleTvPower() {
         
         let DEVICE_MAC = localStorage.getItem('DEVICE_MAC');
         let TOPIC_STATUS, TOPIC_RADAR, TOPIC_CMD;
+let TOPIC_PX_CMD = 'kad/pixora/cmd/zoheb';
+let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
+
         
-        const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
+        const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt', { clientId: 'followme_web_' + Math.random().toString(16).substr(2, 8) });
 
         function initCorridorConnection() {
             if (!DEVICE_MAC) {
@@ -346,6 +349,8 @@ function toggleTvPower() {
                 initCorridorConnection();
             }
             client.subscribe("kad/tvbacklit/cmd/zoheb");
+            client.subscribe(TOPIC_PX_STATUS);
+
             if(statusDot) statusDot.classList.add('connected');
             const err = document.getElementById('connErrorMsg');
             if (err) err.style.display = 'none';
@@ -359,7 +364,8 @@ function toggleTvPower() {
 
         client.on('close', () => {
             if(statusDot) statusDot.classList.remove('connected');
-            document.getElementById('connErrorMsg').style.display = 'block';
+            const err = document.getElementById('connErrorMsg');
+            if (err) err.style.display = 'block';
             isConnected = false;
         });
 
