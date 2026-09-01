@@ -897,10 +897,7 @@
           <div class="section">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                   <span style="font-size: 14px; font-weight: 500;">Power</span>
-                  <label class="switch">
-                      <input type="checkbox" id="pxPower" onchange="togglePxPower()" checked>
-                      <span class="slider round"></span>
-                  </label>
+                  <button id="pxPowerBtn" onclick="togglePxPower()" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px; height: 32px; padding: 0 20px; font-size: 13px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-sizing: border-box;">ON</button>
               </div>
           </div>
 
@@ -981,11 +978,11 @@
               <div class="panel-content" id="pxEffectContent">
                   <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 4px;">
                       <button class="tv-effect-btn px-effect-btn active" onclick="setPxEffect(this, 'solid')">Solid Color</button>
-                      <button class="tv-effect-btn px-effect-btn" onclick="setPxEffect(this, 'tetris')">Tetris Animation</button>
-                      <button class="tv-effect-btn px-effect-btn" onclick="setPxEffect(this, 'matrix_rain')">Matrix Rain</button>
-                      <button class="tv-effect-btn px-effect-btn" onclick="setPxEffect(this, 'plasma')">Plasma Waves</button>
-                      <button class="tv-effect-btn px-effect-btn" onclick="setPxEffect(this, 'game_of_life')">Game of Life</button>
-                      <button class="tv-effect-btn px-effect-btn" onclick="setPxEffect(this, 'fire')">2D Fire</button>
+                      <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'tetris')">Tetris Animation</button>
+                      <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'matrix_rain')">Matrix Rain</button>
+                      <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'plasma')">Plasma Waves</button>
+                      <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'game_of_life')">Game of Life</button>
+                      <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'fire')">2D Fire</button>
                   </div>
               </div>
           </div>

@@ -1037,11 +1037,9 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
           function setPxEffect(btn, effect) {
               document.querySelectorAll('.px-effect-btn').forEach(b => {
                   b.classList.remove('active');
-                  b.innerHTML = b.innerHTML.replace(' <span style="float:right">?</span>', '');
-              });
+                                });
               btn.classList.add('active');
-              btn.innerHTML += ' <span style="float:right">?</span>';
-              pxEffect = effect;
+                            pxEffect = effect;
               sendPxUpdate();
           }
 
