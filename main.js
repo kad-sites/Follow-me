@@ -408,11 +408,13 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
                     if (data.effect !== undefined) {
                         pxEffect = data.effect;
                         document.querySelectorAll('.px-effect-btn').forEach(btn => {
-                            if (btn.innerText.toLowerCase().includes(pxEffect.replace('_', ' ').split(' ')[0])) {
+                            // Check the onclick attribute to see if it matches exactly
+                            const onclickStr = btn.getAttribute('onclick') || "";
+                            if (onclickStr.includes(`'${pxEffect}'`) || onclickStr.includes(`"${pxEffect}"`)) {
                                 btn.classList.add('active');
-                            } else if (pxEffect === 'solid' && btn.innerText.includes('Solid')) btn.classList.add('active');
-                            else if (pxEffect === 'candy_crush' && btn.innerText.includes('Candy')) btn.classList.add('active');
-                            else btn.classList.remove('active');
+                            } else {
+                                btn.classList.remove('active');
+                            }
                         });
                     }
                     if (data.text !== undefined) {
