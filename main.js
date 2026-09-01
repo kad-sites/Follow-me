@@ -17,6 +17,7 @@ import mqtt from 'mqtt';
         
         
           let pxEffect = 'solid';
+        let pxText = 'ZOHEB';
           let pxR = 255, pxG = 147, pxB = 41;
           let pxIsOn = true;
 let colorTarget = 'follow'; // 'follow' or 'base'
@@ -419,7 +420,14 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
                         cSeqStr = data.c_seq.join('-');
                         document.getElementById('cSeqStr').value = cSeqStr;
                     }
-                                      if (data.effect !== undefined) {
+                                                          if (data.text !== undefined) {
+                        pxText = data.text;
+                        const el = document.getElementById('pxTextInput');
+                        if (el && document.activeElement !== el) {
+                            el.value = pxText;
+                        }
+                    }
+                    if (data.effect !== undefined) {
                       tvEffect = data.effect;
                       document.querySelectorAll('.tv-effect-btn').forEach(btn => {
                           let t = btn.textContent.toLowerCase();
@@ -738,7 +746,20 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
 
         
           
-          ['pxBrightness', 'pxSpeed'].forEach(id => {
+          
+        let pxTextTimeout = null;
+        const pxTextInput = document.getElementById('pxTextInput');
+        if (pxTextInput) {
+            pxTextInput.addEventListener('input', (e) => {
+                pxText = e.target.value.substring(0, 30).toUpperCase(); // enforce upper case and limit length
+                if (pxTextTimeout) clearTimeout(pxTextTimeout);
+                pxTextTimeout = setTimeout(() => {
+                    sendPxUpdate();
+                }, 400); // 400ms debounce
+            });
+        }
+
+        ['pxBrightness', 'pxSpeed'].forEach(id => {
               const el = document.getElementById(id);
               if (el) {
                   el.addEventListener('input', (e) => {
@@ -991,6 +1012,7 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
                       brightness: parseInt(document.getElementById('pxBrightness') ? document.getElementById('pxBrightness').value : 60),
                       speed: parseInt(document.getElementById('pxSpeed') ? document.getElementById('pxSpeed').value : 50),
                       effect: pxEffect,
+                        text: pxText,
                       r: pxR,
                       g: pxG,
                       b: pxB
