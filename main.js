@@ -111,16 +111,14 @@ function toggleTvPower() {
             const target = document.getElementById('tab-' + tabId);
             if (target) {
                 target.classList.add('active');
-                target.style.display = 'flex';
+                target.style.display = 'block';
             }
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                if (btn.textContent.toLowerCase().includes(tabId === 'corridor' ? 'corridor' : 'tv')) {
-                    btn.classList.add('active');
-                }
-            });
-            activeTab = tabId;
             
-
+            const btn = document.getElementById('btn-' + tabId);
+            if (btn) {
+                btn.classList.add('active');
+            }
+            activeTab = tabId;
         }
 
                 function toggleTvColor() {
