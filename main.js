@@ -15,7 +15,11 @@ import mqtt from 'mqtt';
 
         // State
         
-        let colorTarget = 'follow'; // 'follow' or 'base'
+        
+          let pxEffect = 'solid';
+          let pxR = 255, pxG = 147, pxB = 41;
+          let pxIsOn = true;
+let colorTarget = 'follow'; // 'follow' or 'base'
         let followColorHex = "#ff9329";
         let baseColorHex = "#ff9329";
 
@@ -729,6 +733,20 @@ function toggleTvPower() {
         });
 
         
+          
+          ['pxBrightness', 'pxSpeed'].forEach(id => {
+              const el = document.getElementById(id);
+              if (el) {
+                  el.addEventListener('input', (e) => {
+                      const valDisplay = document.getElementById(id + 'Val');
+                      if (valDisplay) valDisplay.innerText = e.target.value + (id.includes('Speed')?'%':'');
+                  });
+                  el.addEventListener('change', () => {
+                      sendPxUpdate();
+                  });
+              }
+          });
+
           // VU Meter Sliders (TV)
           ['vlb', 'vlt', 'vrb', 'vrt', 'vuGY', 'vuYR'].forEach(id => {
               const el = document.getElementById(id);
@@ -953,8 +971,86 @@ function toggleTvPower() {
         window.setTvEffect = setTvEffect;
         window.sendTvUpdate = sendTvUpdate;
         window.toggleTvPower = toggleTvPower;
+          window.togglePxColor = togglePxColor;
+          window.togglePxEffect = togglePxEffect;
+          window.setPxColor = setPxColor;
+          window.setPxRandomColor = setPxRandomColor;
+          window.setPxEffect = setPxEffect;
+          window.savePxSettings = savePxSettings;
+          window.togglePxPower = togglePxPower;
+          window.sendPxUpdate = sendPxUpdate;
 
-        // Restore tab on load
+        
+          function sendPxUpdate(extraPayload = {}) {
+              if (isConnected) {
+                  let payload = {
+                      power: document.getElementById('pxPower') ? document.getElementById('pxPower').checked : true,
+                      brightness: parseInt(document.getElementById('pxBrightness') ? document.getElementById('pxBrightness').value : 60),
+                      speed: parseInt(document.getElementById('pxSpeed') ? document.getElementById('pxSpeed').value : 50),
+                      effect: pxEffect,
+                      r: pxR,
+                      g: pxG,
+                      b: pxB
+                  };
+                  Object.assign(payload, extraPayload);
+                  client.publish(TOPIC_PX_CMD, JSON.stringify(payload));
+              }
+          }
+
+          function togglePxPower() {
+              sendPxUpdate();
+          }
+
+          function setPxColor(btn, r, g, b) {
+              document.querySelectorAll('.px-color-btn').forEach(b => b.classList.remove('active'));
+              if(btn) btn.classList.add('active');
+              pxR = r; pxG = g; pxB = b;
+              sendPxUpdate();
+          }
+          
+          function setPxRandomColor() {
+              document.querySelectorAll('.px-color-btn').forEach(b => b.classList.remove('active'));
+              pxR = Math.floor(Math.random() * 256);
+              pxG = Math.floor(Math.random() * 256);
+              pxB = Math.floor(Math.random() * 256);
+              sendPxUpdate({random_color: true});
+          }
+
+          function setPxEffect(btn, effect) {
+              document.querySelectorAll('.px-effect-btn').forEach(b => {
+                  b.classList.remove('active');
+                  b.innerHTML = b.innerHTML.replace(' <span style="float:right">?</span>', '');
+              });
+              btn.classList.add('active');
+              btn.innerHTML += ' <span style="float:right">?</span>';
+              pxEffect = effect;
+              sendPxUpdate();
+          }
+
+          function togglePxColor() {
+              const content = document.getElementById('pxColorContent');
+              const chevron = document.getElementById('pxColorChevron');
+              content.classList.toggle('open');
+              chevron.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+          }
+
+          function togglePxEffect() {
+              const content = document.getElementById('pxEffectContent');
+              const chevron = document.getElementById('pxEffectChevron');
+              content.classList.toggle('open');
+              chevron.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+          }
+          
+          window.savePxSettings = function() {
+              if (!isConnected) {
+                  showToast("Not connected to MQTT");
+                  return;
+              }
+              sendPxUpdate({save: true});
+              showToast("Pixora Settings Saved!");
+          }
+
+          // Restore tab on load
         const savedTab = localStorage.getItem('activeTab');
         if (savedTab) {
             switchTab(savedTab);
