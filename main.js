@@ -976,8 +976,7 @@ function toggleTvPower() {
           window.setPxColor = setPxColor;
           window.setPxRandomColor = setPxRandomColor;
           window.setPxEffect = setPxEffect;
-          window.savePxSettings = savePxSettings;
-          window.togglePxPower = togglePxPower;
+                    window.togglePxPower = togglePxPower;
           window.sendPxUpdate = sendPxUpdate;
 
         
