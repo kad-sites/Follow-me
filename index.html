@@ -37,7 +37,7 @@
             --subtext: #a8a29e;
             --accent: #f59e0b;
             --border: rgba(245, 158, 11, 0.15);
-            --thumb-size: 24px;
+            --thumb-size: 16px;
         }
         
         * {
@@ -96,12 +96,12 @@
         }
 
         .section {
-            margin-bottom: 4px; margin-bottom: 4px; padding: 8px 16px; 
+            margin-bottom: 4px;
             background: var(--card);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-radius: 12px;
-            padding: 12px 20px;
+            border-radius: 10px;
+            padding: 6px 14px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             border: 1px solid var(--border);
             width: 100%;
@@ -110,10 +110,9 @@
 
         .section-header {
             display: flex;
-            margin-bottom: 4px;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2px; /* Tighter margin */
+            margin-bottom: 0px;
         }
 
         .section-title {
@@ -130,7 +129,7 @@
         /* Sliders */
         .slider-container {
             width: 100%;
-            padding: 4px 0;
+            padding: 2px 0;
         }
 
         .slider-labels {
@@ -155,7 +154,7 @@
 
         input[type=range]::-webkit-slider-runnable-track {
             width: 100%;
-            height: 6px; /* thinner track */
+            height: 3px;
             cursor: pointer;
             background: #333;
             border-radius: 4px;
@@ -674,9 +673,7 @@
                     <span style="font-size: 13px; font-weight: 500; color: var(--text);">Pixels</span>
                     <input type="number" id="tvPixels" min="10" max="500" value="27" style="width: 52px; height: 32px; padding: 0; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: #fff; font-size: 13px; font-weight: bold; font-family: inherit; text-align: center; -moz-appearance: textfield; box-sizing: border-box;">
                 </div>
-                <button id="tvPowerBtn" onclick="toggleTvPower()" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px; height: 32px; padding: 0 20px; font-size: 13px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-sizing: border-box;">
-                    ON
-                </button>
+                <button id="tvPowerBtn" onclick="toggleTvPower()" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 4px; height: 24px; padding: 0 12px; font-size: 11px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-sizing: border-box;">ON</button>
             </div>
         </div>
 
@@ -895,9 +892,9 @@
         <!-- PIXORA TAB -->
         <div id="tab-pixora" class="tab-content" style="display: block;">
           <div class="section">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
                   <span style="font-size: 14px; font-weight: 500;">Power</span>
-                  <button id="pxPowerBtn" onclick="togglePxPower()" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px; height: 32px; padding: 0 20px; font-size: 13px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-sizing: border-box;">ON</button>
+                  <button id="pxPowerBtn" onclick="togglePxPower()" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 4px; height: 24px; padding: 0 12px; font-size: 11px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-sizing: border-box;">ON</button>
               </div>
           </div>
 
