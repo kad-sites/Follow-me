@@ -987,7 +987,7 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
           function sendPxUpdate(extraPayload = {}) {
               if (isConnected) {
                   let payload = {
-                      power: document.getElementById('pxPower') ? document.getElementById('pxPower').checked : true,
+                      power: pxIsOn,
                       brightness: parseInt(document.getElementById('pxBrightness') ? document.getElementById('pxBrightness').value : 60),
                       speed: parseInt(document.getElementById('pxSpeed') ? document.getElementById('pxSpeed').value : 50),
                       effect: pxEffect,
@@ -1001,8 +1001,23 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
           }
 
           function togglePxPower() {
-              sendPxUpdate();
-          }
+            pxIsOn = !pxIsOn;
+            const btn = document.getElementById('pxPowerBtn');
+            if (btn) {
+                if (pxIsOn) {
+                    btn.innerText = "ON";
+                    btn.style.color = "#10b981";
+                    btn.style.background = "rgba(16, 185, 129, 0.15)";
+                    btn.style.borderColor = "rgba(16, 185, 129, 0.3)";
+                } else {
+                    btn.innerText = "OFF";
+                    btn.style.color = "#ef4444";
+                    btn.style.background = "rgba(239, 68, 68, 0.15)";
+                    btn.style.borderColor = "rgba(239, 68, 68, 0.3)";
+                }
+            }
+            sendPxUpdate();
+        }
 
           function setPxColor(btn, r, g, b) {
               document.querySelectorAll('.px-color-btn').forEach(b => b.classList.remove('active'));
