@@ -48,12 +48,18 @@ Effect currentEffect = SOLID;
 // --- Helper Functions ---
 // Convert (x, y) coordinates to 1D array index
 uint16_t XY(uint8_t x, uint8_t y) {
-  // 7 vertical strips of 8 LEDs each.
+  // 7 vertical strips of 8 LEDs each. ZIG-ZAG Layout.
   // x = strip/column index (0=leftmost, 6=rightmost)
   // y = row (0=top, 7=bottom)
-  // All strips wired bottom-to-top: LED 0=bottom(y=7), LED 7=top(y=0)
-  // Data in series: strip0(LEDs 0-7), strip1(LEDs 8-15), etc.
-  uint8_t pos = (MATRIX_HEIGHT - 1) - y;  // flip: y=0(top) -> pos=7, y=7(bottom) -> pos=0
+  // Even columns (0,2,4,6) run Bottom-to-Top. Odd columns (1,3,5) run Top-to-Bottom.
+  uint8_t pos;
+  if (x % 2 == 0) {
+    // Even column: Bottom to Top (y=7 is LED 0)
+    pos = (MATRIX_HEIGHT - 1) - y;
+  } else {
+    // Odd column: Top to Bottom (y=0 is LED 0)
+    pos = y;
+  }
   return (uint16_t)x * MATRIX_HEIGHT + pos;
 }
 
