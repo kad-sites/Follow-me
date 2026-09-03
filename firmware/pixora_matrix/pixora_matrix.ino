@@ -783,7 +783,7 @@ void loop() {
                 
                 if (matchFound) {
                   // Blink matched in their own color
-                  for(int b=0; b<3; b++) {
+                  for(int b=0; b<2; b++) {
                     // Turn OFF the matched candies to create the blink effect
                     FastLED.clear();
                     for(int r=0; r<MATRIX_HEIGHT; r++) {
@@ -792,7 +792,7 @@ void loop() {
                       }
                     }
                     FastLED.show();
-                    delay(150);
+                    delay(60);
                     
                     // Turn ON the matched candies in their original bright color
                     FastLED.clear();
@@ -802,7 +802,7 @@ void loop() {
                       }
                     }
                     FastLED.show();
-                    delay(150);
+                    delay(60);
                   }
                   
                   // Remove matched and apply gravity
