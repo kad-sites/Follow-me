@@ -106,14 +106,12 @@ function toggleTvPower() {
             localStorage.setItem('activeTab', tabId);
             document.querySelectorAll('.tab-content').forEach(el => {
                 el.classList.remove('active');
-                el.style.display = 'none';
             });
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
             const target = document.getElementById('tab-' + tabId);
             if (target) {
                 target.classList.add('active');
-                target.style.display = 'block';
             }
             
             const btn = document.getElementById('btn-' + tabId);

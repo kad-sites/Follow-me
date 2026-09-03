@@ -422,6 +422,14 @@
         .panel-content.open {
             max-height: 1000px; /* Big enough for content */
         }
+
+        /* Tab visibility: hidden by default, shown only when active */
+        .tab-content {
+            display: none !important;
+        }
+        .tab-content.active {
+            display: block !important;
+        }
 </style>
 </head>
 <body>
@@ -435,28 +443,18 @@
         <script>
             (function(){
                 var t = localStorage.getItem('activeTab') || 'corridor';
+                // Store saved tab for use after DOM is ready
+                document.body.setAttribute('data-active-tab', t);
                 
-                // Hide all tabs
-                var tabs = document.querySelectorAll('.tab-content');
-                for (var i = 0; i < tabs.length; i++) {
-                    tabs[i].classList.remove('active');
-                    tabs[i].style.display = 'none';
-                }
-                
-                // Show active tab
-                var target = document.getElementById('tab-' + t);
-                if (target) {
-                    target.classList.add('active');
-                    target.style.display = 'block';
-                }
-                
+                // Highlight the correct tab button (buttons exist above)
+                document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
                 var btn = document.getElementById('btn-' + t);
                 if (btn) btn.classList.add('active');
             })();
         </script>
 
     <!-- TAB 1: CORRIDOR (Original Code) -->
-    <div id="tab-corridor" class="tab-content active" style="position: relative;">
+    <div id="tab-corridor" class="tab-content" style="position: relative;">
 
     <div id="mac-overlay" style="display: none; position: absolute; inset: 0; background: var(--bg); z-index: 100; flex-direction: column; align-items: center; justify-content: center; padding: 24px;">
         <h2 style="margin-bottom: 16px; text-align: center;">Corridor Setup</h2>
@@ -679,7 +677,7 @@
     </div>
 
     <!-- TAB 2: TV BACKLIGHT -->
-    <div id="tab-tv" class="tab-content" style="display: none;">
+    <div id="tab-tv" class="tab-content">
         <div class="section" style="padding: 8px 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 8px;">
@@ -903,7 +901,7 @@
       </div> <!-- End tab-tv -->
 
         <!-- PIXORA TAB -->
-        <div id="tab-pixora" class="tab-content" style="display: none;">
+        <div id="tab-pixora" class="tab-content">
           <div class="section">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
                   <span style="font-size: 14px; font-weight: 500;">Power</span>
@@ -1039,6 +1037,20 @@
 
     <div class="toast" id="toast">Settings Saved</div>
 
+    <!-- Set active tab AFTER all tab-content divs exist in DOM -->
+    <script>
+        (function(){
+            var t = document.body.getAttribute('data-active-tab') || localStorage.getItem('activeTab') || 'corridor';
+            var target = document.getElementById('tab-' + t);
+            if (target) {
+                target.classList.add('active');
+            } else {
+                // Fallback: show corridor if saved tab doesn't exist
+                var fallback = document.getElementById('tab-corridor');
+                if (fallback) fallback.classList.add('active');
+            }
+        })();
+    </script>
     <script type="module" src="/main.js"></script>
 </body>
 </html>
