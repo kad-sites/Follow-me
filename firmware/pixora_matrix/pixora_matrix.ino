@@ -709,12 +709,28 @@ void loop() {
             }
           }
           
-          if (aliveCount < 2) initialized = false; // Reset if dead or frozen
-          
+          uint64_t currentState = 0;
+          int bitPos = 0;
           for(int x=0; x<MATRIX_WIDTH; x++) {
             for(int y=0; y<MATRIX_HEIGHT; y++) {
               grid[x][y] = nextGrid[x][y];
+              if (grid[x][y]) currentState |= (1ULL << bitPos);
+              bitPos++;
             }
+          }
+          
+          static uint64_t history[6] = {0,0,0,0,0,0};
+          bool stuck = false;
+          for(int i=0; i<6; i++) {
+             if (currentState == history[i]) stuck = true;
+          }
+          
+          for(int i=5; i>0; i--) history[i] = history[i-1];
+          history[0] = currentState;
+          
+          if (aliveCount < 2 || stuck) {
+            initialized = false; // Reset if dead or caught in a boring loop
+            for(int i=0; i<6; i++) history[i] = 0;
           }
         }
         
