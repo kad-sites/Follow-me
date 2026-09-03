@@ -189,13 +189,23 @@ void setup() {
 }
 
 void reconnect() {
-  while (!client.connected()) {
+  static unsigned long lastReconnectAttempt = 0;
+  unsigned long now = millis();
+  
+  // Only try to reconnect every 5 seconds so we don't block animations
+  if (now - lastReconnectAttempt > 5000) {
+    lastReconnectAttempt = now;
+    
+    // Check if WiFi dropped, try to reconnect to WiFi first
+    if (WiFi.status() != WL_CONNECTED) {
+      WiFi.reconnect();
+      return; // Skip MQTT this time, wait for WiFi first
+    }
+    
     String clientId = "Pixora-" + String(random(0xffff), HEX);
     if (client.connect(clientId.c_str())) {
       client.subscribe(mqtt_topic_cmd);
       publishStatus();
-    } else {
-      delay(2000);
     }
   }
 }
@@ -501,8 +511,9 @@ void loop() {
   ArduinoOTA.handle();
   if (!client.connected()) {
     reconnect();
+  } else {
+    client.loop(); // Only call client.loop() if actually connected
   }
-  client.loop();
 
   if (!pxIsOn) {
     FastLED.clear();
