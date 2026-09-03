@@ -1158,7 +1158,7 @@ void loop() {
                 int ix = (int)starsX[i];
                 int iy = (int)starsY[i];
                 if (ix >= 0 && ix < MATRIX_WIDTH && iy >= 0 && iy < MATRIX_HEIGHT) {
-                  leds[XY(ix, iy)] = CRGB::White;
+                  leds[XY(ix, iy)] = CRGB(targetR, targetG, targetB);
                 }
               }
               FastLED.show();
