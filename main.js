@@ -1,3 +1,4 @@
+let tetrisPalette = [];
 import mqtt from 'mqtt';
 
 // Color Presets Definition

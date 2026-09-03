@@ -242,6 +242,8 @@ bool tetrominoes[7][4][4] = {
   {{1,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}}
 };
 CRGB tetColors[7] = {CRGB::Cyan, CRGB::Blue, CRGB::Orange, CRGB::Yellow, CRGB::Green, CRGB::Purple, CRGB::Red};
+CRGB customTetrisColors[3];
+uint8_t numCustomTetrisColors = 0;
 
 bool checkCollision(int x, int y, int type) {
   for(int r=0; r<4; r++) {
