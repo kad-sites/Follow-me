@@ -627,12 +627,35 @@ void loop() {
         uint16_t delayMs = map(pxSpeeds[(int)currentEffect], 1, 100, 50, 10);
         if (now - lastUpdate > delayMs) {
           lastUpdate = now;
-          uint16_t t = millis() / 10;
+          uint16_t t = millis() / 4;
+          
+          // Get base color as HSV
+          CHSV baseHSV = rgb2hsv_approximate(CRGB(targetR, targetG, targetB));
+          
           for (int x = 0; x < MATRIX_WIDTH; x++) {
             for (int y = 0; y < MATRIX_HEIGHT; y++) {
-              byte noise = inoise8(x * 40, y * 40, t);
-              // Mix selected color with noise hue
-              leds[XY(x,y)] = CHSV(noise, 255, 255); 
+              
+              // Complex intersecting sine waves for classic plasma look
+              byte v1 = sin8(x * 40 + t);
+              byte v2 = sin8(y * 30 - t / 2);
+              byte v3 = sin8((x + y) * 20 + t / 3);
+              int cx = x - (MATRIX_WIDTH / 2);
+              int cy = y - (MATRIX_HEIGHT / 2);
+              byte v4 = sin8(sqrt(cx * cx + cy * cy) * 50 - t);
+              
+              // Average them out
+              byte plasmaVal = (v1 + v2 + v3 + v4) / 4;
+              
+              // Enhance the contrast (the "catchy high low")
+              byte contrastVal = cubicwave8(plasmaVal);
+              
+              // Shift the hue slightly (-25 to +25) around their chosen color
+              byte finalHue = baseHSV.hue + map(contrastVal, 0, 255, -25, 25);
+              
+              // Brightness: make the peaks very bright and valleys very dark
+              byte bright = map(contrastVal, 0, 255, 10, 255);
+              
+              leds[XY(x,y)] = CHSV(finalHue, 255, bright); 
             }
           }
           FastLED.show();
