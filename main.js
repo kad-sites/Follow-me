@@ -1,5 +1,5 @@
-let tetrisPalette = [];
 import mqtt from 'mqtt';
+let tetrisPalette = [];
 
 // Color Presets Definition
         const colorPresets = [
@@ -1053,6 +1053,7 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
           window.setPxColor = setPxColor;
           window.setPxRandomColor = setPxRandomColor;
           window.setPxEffect = setPxEffect;
+            window.clearTetrisPalette = clearTetrisPalette;
           window.clearTetrisPalette = clearTetrisPalette;
                     window.togglePxPower = togglePxPower;
           window.sendPxUpdate = sendPxUpdate;
@@ -1060,16 +1061,18 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
         
           function sendPxUpdate(extraPayload = {}) {
               if (isConnected) {
-                  let payload = {
-                      power: pxIsOn,
-                      brightness: parseInt(document.getElementById('pxBrightness') ? document.getElementById('pxBrightness').value : 60),
-                      speed: parseInt(document.getElementById('pxSpeed') ? document.getElementById('pxSpeed').value : 50),
-                      effect: pxEffect,
+                  let tetHex = tetrisPalette.map(c => (c.r << 16) | (c.g << 8) | c.b);
+                    let payload = {
+                        power: pxIsOn,
+                        brightness: parseInt(document.getElementById('pxBrightness') ? document.getElementById('pxBrightness').value : 60),
+                        speed: parseInt(document.getElementById('pxSpeed') ? document.getElementById('pxSpeed').value : 50),
+                        effect: pxEffect,
                         text: pxText,
-                      r: pxR,
-                      g: pxG,
-                      b: pxB
-                  };
+                        r: pxR,
+                        g: pxG,
+                        b: pxB,
+                        tColors: tetHex
+                    };
                   Object.assign(payload, extraPayload);
                   client.publish(TOPIC_PX_CMD, JSON.stringify(payload));
               }
