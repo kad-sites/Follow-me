@@ -735,7 +735,7 @@ void loop() {
               
               // Map heat to brightness and slight hue shift for an organic look
               byte bright = heat[x][y];
-              if (bright < 120) bright = dim8_video(bright); // gamma curve for soothing tails
+              if (bright < 120) bright = ((uint16_t)bright * bright) >> 8; // gamma curve for soothing tails
               
               byte hueShift = map(heat[x][y], 0, 255, -20, 10);
               
