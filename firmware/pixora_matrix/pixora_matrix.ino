@@ -1,5 +1,18 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
+
+#include <driver/i2s_std.h>
+i2s_chan_handle_t rx_handle = NULL;
+#define I2S_SCK 5
+#define I2S_WS 6
+#define I2S_SD 7
+#define SAMPLE_RATE 16000
+#define BLOCK_SIZE 128
+float audioVolume = 0.0;
+float smoothedVolume = 0.0;
+float agcMax = 8000.0;
+float agcMin = 500.0;
+
 #include <FastLED.h>
 #include <ArduinoOTA.h>
 #include <ArduinoJson.h>
@@ -33,17 +46,17 @@ const bool FLIP_X = false;  // Set true if letters are left-right mirrored
 const bool FLIP_Y = false;  // Set true if letters are upside-down
 // Set to true if your matrix strips run vertically instead of horizontally
 
+enum Effect { SOLID, TETRIS, MATRIX_RAIN, PLASMA, GAME_OF_LIFE, FIRE, TEXT_FADE, TEXT_DROP, TEXT_SLIDE, CANDY_CRUSH, FIREWORKS, VU_METER, PACMAN, FALLING_SAND, SMART_SNAKE, WARP_SPEED, RAIN_RIPPLES, MUSIC_PULSE };
+Effect currentEffect = SOLID;
+
 // --- State Variables ---
 bool pxIsOn = true;
-uint8_t pxBrightnesses[17] = {60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60};
-uint8_t pxSpeeds[17] = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
+uint8_t pxBrightnesses[18] = {60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60};
+uint8_t pxSpeeds[18] = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
 uint8_t targetR = 255, targetG = 147, targetB = 41;
 String pxText = "ZOHEB";
 int textIndex = 0;
 unsigned long lastUpdate = 0;
-
-enum Effect { SOLID, TETRIS, MATRIX_RAIN, PLASMA, GAME_OF_LIFE, FIRE, TEXT_FADE, TEXT_DROP, TEXT_SLIDE, CANDY_CRUSH, FIREWORKS, VU_METER, PACMAN, FALLING_SAND, SMART_SNAKE, WARP_SPEED, RAIN_RIPPLES };
-Effect currentEffect = SOLID;
 
 CRGB customTetrisColors[3];
 uint8_t numCustomTetrisColors = 0;
@@ -101,7 +114,7 @@ void publishStatus() {
   doc["r"] = targetR;
   doc["g"] = targetG;
   doc["b"] = targetB;
-  doc["effect"] = currentEffect == SOLID ? "solid" : currentEffect == TETRIS ? "tetris" : currentEffect == MATRIX_RAIN ? "matrix_rain" : currentEffect == PLASMA ? "plasma" : currentEffect == GAME_OF_LIFE ? "game_of_life" : currentEffect == FIRE ? "fire" : currentEffect == TEXT_FADE ? "text_fade" : currentEffect == TEXT_DROP ? "text_drop" : currentEffect == TEXT_SLIDE ? "text_slide" : currentEffect == FIREWORKS ? "fireworks" : currentEffect == VU_METER ? "vu_meter" : currentEffect == PACMAN ? "pacman" : currentEffect == FALLING_SAND ? "falling_sand" : currentEffect == SMART_SNAKE ? "smart_snake" : currentEffect == WARP_SPEED ? "warp_speed" : currentEffect == RAIN_RIPPLES ? "rain_ripples" : "candy_crush";
+  doc["effect"] = currentEffect == SOLID ? "solid" : currentEffect == TETRIS ? "tetris" : currentEffect == MATRIX_RAIN ? "matrix_rain" : currentEffect == PLASMA ? "plasma" : currentEffect == GAME_OF_LIFE ? "game_of_life" : currentEffect == FIRE ? "fire" : currentEffect == TEXT_FADE ? "text_fade" : currentEffect == TEXT_DROP ? "text_drop" : currentEffect == TEXT_SLIDE ? "text_slide" : currentEffect == FIREWORKS ? "fireworks" : currentEffect == VU_METER ? "vu_meter" : currentEffect == PACMAN ? "pacman" : currentEffect == FALLING_SAND ? "falling_sand" : currentEffect == SMART_SNAKE ? "smart_snake" : currentEffect == WARP_SPEED ? "warp_speed" : currentEffect == RAIN_RIPPLES ? "rain_ripples" : currentEffect == MUSIC_PULSE ? "music_pulse" : "candy_crush";
   doc["text"] = pxText;
   char buffer[256];
   serializeJson(doc, buffer);
@@ -164,7 +177,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
       else if (effStr == "falling_sand") currentEffect = FALLING_SAND;
       else if (effStr == "smart_snake") currentEffect = SMART_SNAKE;
       else if (effStr == "warp_speed") currentEffect = WARP_SPEED;
-      else if (effStr == "rain_ripples") currentEffect = RAIN_RIPPLES;
+    else if (effStr == "rain_ripples") currentEffect = RAIN_RIPPLES;
+    else if (effStr == "music_pulse") currentEffect = MUSIC_PULSE;
     changed = true;
     FastLED.clear(); // Clear board on effect change
   }
@@ -178,8 +192,68 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
 }
 
+
+void setup_i2s() {
+    i2s_chan_config_t chan_cfg = I2S_CHANNEL_DEFAULT_CONFIG(I2S_NUM_0, I2S_ROLE_MASTER);
+    esp_err_t err = i2s_new_channel(&chan_cfg, NULL, &rx_handle);
+    if (err != ESP_OK) {
+        Serial.println("Failed to create I2S channel");
+        return;
+    }
+    i2s_std_config_t std_cfg = {
+        .clk_cfg = I2S_STD_CLK_DEFAULT_CONFIG(SAMPLE_RATE),
+        .slot_cfg = I2S_STD_PHILIPS_SLOT_DEFAULT_CONFIG(I2S_DATA_BIT_WIDTH_32BIT, I2S_SLOT_MODE_MONO),
+        .gpio_cfg = {
+            .mclk = I2S_GPIO_UNUSED,
+            .bclk = (gpio_num_t)I2S_SCK,
+            .ws = (gpio_num_t)I2S_WS,
+            .dout = I2S_GPIO_UNUSED,
+            .din = (gpio_num_t)I2S_SD,
+            .invert_flags = { .mclk_inv = false, .bclk_inv = false, .ws_inv = false }
+        }
+    };
+    std_cfg.slot_cfg.slot_mask = I2S_STD_SLOT_LEFT;
+    i2s_channel_init_std_mode(rx_handle, &std_cfg);
+    i2s_channel_enable(rx_handle);
+}
+
+void processAudio() {
+    int32_t raw_samples[BLOCK_SIZE];
+    size_t bytes_read = 0;
+    esp_err_t result = i2s_channel_read(rx_handle, &raw_samples, sizeof(raw_samples), &bytes_read, 0); // Non-blocking
+    if (result != ESP_OK || bytes_read == 0) return;
+    
+    int samples_read = bytes_read / sizeof(int32_t);
+    float rawVolume = 0;
+    for (int i = 0; i < samples_read; i++) {
+        float sample = abs((float)(raw_samples[i] >> 14)); 
+        if (sample > rawVolume) rawVolume = sample;
+    }
+    
+    if (rawVolume > agcMax) agcMax = rawVolume;
+    if (rawVolume < agcMin && rawVolume > 10) agcMin = rawVolume;
+    agcMax -= (agcMax - 8000.0) * 0.001; 
+    agcMin += (500.0 - agcMin) * 0.001;
+    if (agcMax - agcMin < 1500.0) agcMax = agcMin + 1500.0;
+    
+    float dynamicRange = agcMax - agcMin;
+    float squelchPct = map((long)pxSpeeds[(int)currentEffect], 1, 100, 40, 5) / 100.0;
+    float noiseGate = agcMin + (dynamicRange * squelchPct);
+    
+    if (rawVolume < noiseGate) rawVolume = 0;
+    else rawVolume = map(rawVolume, noiseGate, agcMax, 0, 255);
+    
+    if (rawVolume > 255) rawVolume = 255;
+    if (rawVolume < 0) rawVolume = 0;
+    
+    audioVolume = rawVolume;
+    if (audioVolume > smoothedVolume) smoothedVolume = audioVolume; 
+    else smoothedVolume = smoothedVolume * 0.85 + audioVolume * 0.15; 
+}
+
 void setup() {
   Serial.begin(115200);
+    setup_i2s();
   
   loadSettings();
 
@@ -544,13 +618,30 @@ void loop() {
   FastLED.setBrightness(pxBrightnesses[(int)currentEffect]);
   unsigned long now = millis();
 
+  if (currentEffect == MUSIC_PULSE || currentEffect == VU_METER) processAudio();
+
   switch (currentEffect) {
     case SOLID:
       fill_solid(leds, NUM_LEDS, CRGB(targetR, targetG, targetB));
       FastLED.show();
       break;
 
-    case TETRIS:
+    
+      case MUSIC_PULSE:
+        {
+          float normVol = smoothedVolume / 255.0;
+          normVol = normVol * normVol * normVol; // cubic curve
+          uint8_t minBright = pxBrightnesses[(int)currentEffect] / 10;
+          if (minBright < 5) minBright = 5;
+          uint8_t pulseBright = minBright + (normVol * (pxBrightnesses[(int)currentEffect] - minBright));
+          
+          fill_solid(leds, NUM_LEDS, CRGB(targetR, targetG, targetB));
+          FastLED.setBrightness(pulseBright);
+          FastLED.show();
+        }
+        break;
+
+      case TETRIS:
       {
         uint16_t delayMs = map(pxSpeeds[(int)currentEffect], 1, 100, 800, 100);
         if (now - lastUpdate > delayMs) {
@@ -992,20 +1083,30 @@ void loop() {
 
         case VU_METER:
           {
-            uint16_t delayMs = map(pxSpeeds[(int)currentEffect], 1, 100, 100, 30);
+            uint16_t delayMs = map(pxSpeeds[(int)currentEffect], 1, 100, 50, 10);
             if (now - lastUpdate > delayMs) {
               lastUpdate = now;
               FastLED.clear();
 
-              // For each column, generate a random height
+              // Use real audio volume
+              static uint8_t heights[MATRIX_WIDTH] = {0};
+              
+              // Map volume 0-255 to matrix height 0-8
+              uint8_t targetHeight = map(audioVolume, 0, 255, 0, 8);
+              
+              // Shift columns left (spectrogram style) or just bounce the middle
+              // Let's do a classic equalizer look: center is highest, edges are lower
               for (int x = 0; x < MATRIX_WIDTH; x++) {
-                // Generate a smooth bouncing height
-                // We simulate an audio envelope for each column
-                static uint8_t heights[7] = {0,0,0,0,0,0,0};
+                int distFromCenter = abs(x - (MATRIX_WIDTH / 2));
+                int colTarget = targetHeight - distFromCenter;
+                if (colTarget < 0) colTarget = 0;
                 
-                // Randomly punch the height up
-                if (random8() < 50) {
-                  heights[x] = random8(3, 8); // Jump to random height
+                // Add some random noise for visual variety
+                if (colTarget > 0 && random8() < 50) colTarget += random8(0, 2);
+                if (colTarget > 8) colTarget = 8;
+                
+                if (colTarget > heights[x]) {
+                  heights[x] = colTarget; // Fast attack
                 } else {
                   if (heights[x] > 0) heights[x]--; // Gravity decay
                 }
@@ -1016,7 +1117,7 @@ void loop() {
                   
                   // Color gradient from bottom to top
                   // Bottom (7) = Green, Middle (4) = Yellow, Top (0) = Red
-                  uint8_t h = map(y, 0, 7, 0, 96); // Red is 0, Green is ~96
+                  uint8_t h = map(y, 0, 7, 0, 96); 
                   leds[XY(x, y)] = CHSV(h, 255, 255);
                 }
               }
