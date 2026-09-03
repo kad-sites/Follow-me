@@ -722,12 +722,26 @@ void loop() {
           if (now - lastUpdate > delayMs) {
             lastUpdate = now;
             
-            // Spawn new candy
-            if (!candyActive) {
-              currentCandyX = random(MATRIX_WIDTH);
-              currentCandyY = -1;
-              currentCandyColor = ccColors[random(4)];
-              candyActive = true;
+                          // Spawn new candy
+              if (!candyActive) {
+                currentCandyX = random(MATRIX_WIDTH);
+                currentCandyY = -1;
+                
+                // 20% chance to explicitly match the color of the candy it will land on
+                if (random(100) < 20) {
+                  CRGB forcedColor = ccColors[random(4)]; // fallback
+                  for (int r = 0; r < MATRIX_HEIGHT; r++) {
+                    if (candyGrid[currentCandyX][r]) {
+                      forcedColor = candyGrid[currentCandyX][r];
+                      break;
+                    }
+                  }
+                  currentCandyColor = forcedColor;
+                } else {
+                  currentCandyColor = ccColors[random(4)];
+                }
+                
+                candyActive = true;
               
               // If board is full, reset
               if(candyGrid[currentCandyX][0]) {
