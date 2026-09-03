@@ -1049,7 +1049,7 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
           window.togglePxColor = togglePxColor;
           window.togglePxEffect = togglePxEffect;
           window.setPxColor = setPxColor;
-          window.setPxRandomColor = setPxRandomColor;
+          window.handlePxColorPicker = handlePxColorPicker;
           window.setPxEffect = setPxEffect;
             window.clearTetrisPalette = clearTetrisPalette;
           window.clearTetrisPalette = clearTetrisPalette;
@@ -1136,12 +1136,15 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
               sendPxUpdate();
           }
           
-          function setPxRandomColor() {
-              document.querySelectorAll('.px-color-btn').forEach(b => b.classList.remove('active'));
-              pxR = Math.floor(Math.random() * 256);
-              pxG = Math.floor(Math.random() * 256);
-              pxB = Math.floor(Math.random() * 256);
-              sendPxUpdate({random_color: true});
+          function handlePxColorPicker(inputElement) {
+              const hex = inputElement.value; // e.g. "#ff0000"
+              const r = parseInt(hex.slice(1, 3), 16);
+              const g = parseInt(hex.slice(3, 5), 16);
+              const b = parseInt(hex.slice(5, 7), 16);
+              
+              // Get the parent color-btn and pass it to setPxColor to handle the palette addition
+              const btn = inputElement.closest('.px-color-btn');
+              setPxColor(btn, r, g, b);
           }
 
           function setPxEffect(btn, effect) {
