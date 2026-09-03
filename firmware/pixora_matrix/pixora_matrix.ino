@@ -655,7 +655,7 @@ void loop() {
               // Brightness: make the peaks very bright and valleys very dark
               byte bright = map(contrastVal, 0, 255, 10, 255);
               
-              leds[XY(x,y)] = CHSV(finalHue, 255, bright); 
+              leds[XY(x,y)] = CHSV(finalHue, baseHSV.sat, bright); 
             }
           }
           FastLED.show();
@@ -755,7 +755,7 @@ void loop() {
               
               byte hueShift = map(heat[x][y], 0, 255, -20, 10);
               
-              leds[XY(x,y)] = CHSV(baseHSV.hue + hueShift, 255, bright);
+              leds[XY(x,y)] = CHSV(baseHSV.hue + hueShift, baseHSV.sat, bright);
             }
           }
           FastLED.show();
