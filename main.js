@@ -1053,6 +1053,7 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
           window.setPxColor = setPxColor;
           window.setPxRandomColor = setPxRandomColor;
           window.setPxEffect = setPxEffect;
+          window.clearTetrisPalette = clearTetrisPalette;
                     window.togglePxPower = togglePxPower;
           window.sendPxUpdate = sendPxUpdate;
 
@@ -1109,13 +1110,25 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
           }
 
           function setPxEffect(btn, effect) {
-              document.querySelectorAll('.px-effect-btn').forEach(b => {
-                  b.classList.remove('active');
-                                });
-              btn.classList.add('active');
-                            pxEffect = effect;
-              sendPxUpdate();
-          }
+                document.querySelectorAll('.px-effect-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                if(btn) btn.classList.add('active');
+                pxEffect = effect;
+                
+                // Show tetris custom UI if tetris is selected
+                let tetUI = document.getElementById('tetrisPaletteUI');
+                if (tetUI) {
+                    tetUI.style.display = (effect === 'tetris') ? 'block' : 'none';
+                    // Recompute max-height if the dropdown is open
+                    let content = document.getElementById('pxColorContent');
+                    if (content && content.style.maxHeight) {
+                        content.style.maxHeight = content.scrollHeight + 50 + "px";
+                    }
+                }
+                
+                sendPxUpdate();
+            }
 
           function togglePxColor() {
               const content = document.getElementById('pxColorContent');
