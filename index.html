@@ -435,10 +435,23 @@
         <script>
             (function(){
                 var t = localStorage.getItem('activeTab') || 'corridor';
-                var btn = document.getElementById('btn-' + t);
-                if(btn) btn.classList.add('active');
                 
-
+                // Hide all tabs
+                var tabs = document.querySelectorAll('.tab-content');
+                for (var i = 0; i < tabs.length; i++) {
+                    tabs[i].classList.remove('active');
+                    tabs[i].style.display = 'none';
+                }
+                
+                // Show active tab
+                var target = document.getElementById('tab-' + t);
+                if (target) {
+                    target.classList.add('active');
+                    target.style.display = 'block';
+                }
+                
+                var btn = document.getElementById('btn-' + t);
+                if (btn) btn.classList.add('active');
             })();
         </script>
 
