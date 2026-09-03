@@ -629,9 +629,6 @@ void loop() {
           lastUpdate = now;
           uint16_t t = millis() / 4;
           
-          // Get base color as HSV
-          CHSV baseHSV = rgb2hsv_approximate(CRGB(targetR, targetG, targetB));
-          
           for (int x = 0; x < MATRIX_WIDTH; x++) {
             for (int y = 0; y < MATRIX_HEIGHT; y++) {
               
@@ -649,13 +646,12 @@ void loop() {
               // Enhance the contrast (the "catchy high low")
               byte contrastVal = cubicwave8(plasmaVal);
               
-              // Shift the hue slightly (-25 to +25) around their chosen color
-              byte finalHue = baseHSV.hue + map(contrastVal, 0, 255, -25, 25);
-              
               // Brightness: make the peaks very bright and valleys very dark
               byte bright = map(contrastVal, 0, 255, 10, 255);
               
-              leds[XY(x,y)] = CHSV(finalHue, baseHSV.sat, bright); 
+              CRGB c = CRGB(targetR, targetG, targetB);
+              c.nscale8(bright);
+              leds[XY(x,y)] = c; 
             }
           }
           FastLED.show();
@@ -737,7 +733,6 @@ void loop() {
         // --- 2. Smooth Drawing (Fast, 30fps) ---
         if (now - lastDrawTick > 33) {
           lastDrawTick = now;
-          CHSV baseHSV = rgb2hsv_approximate(CRGB(targetR, targetG, targetB));
           
           for(int x=0; x<MATRIX_WIDTH; x++) {
             for(int y=0; y<MATRIX_HEIGHT; y++) {
@@ -749,13 +744,13 @@ void loop() {
                 heat[x][y] = qsub8(heat[x][y], 6);  // fade out gracefully
               }
               
-              // Map heat to brightness and slight hue shift for an organic look
+              // Map heat to brightness for an organic look
               byte bright = heat[x][y];
               if (bright < 120) bright = ((uint16_t)bright * bright) >> 8; // gamma curve for soothing tails
               
-              byte hueShift = map(heat[x][y], 0, 255, -20, 10);
-              
-              leds[XY(x,y)] = CHSV(baseHSV.hue + hueShift, baseHSV.sat, bright);
+              CRGB c = CRGB(targetR, targetG, targetB);
+              c.nscale8(bright);
+              leds[XY(x,y)] = c;
             }
           }
           FastLED.show();
