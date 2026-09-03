@@ -665,20 +665,29 @@ void loop() {
       
     case GAME_OF_LIFE:
       {
-        uint16_t delayMs = map(pxSpeeds[(int)currentEffect], 1, 100, 800, 100);
-        if (now - lastUpdate > delayMs) {
-          lastUpdate = now;
-          
-          static bool grid[MATRIX_WIDTH][MATRIX_HEIGHT];
-          static bool nextGrid[MATRIX_WIDTH][MATRIX_HEIGHT];
-          static bool initialized = false;
-          
-          if (!initialized) {
-            for(int x=0; x<MATRIX_WIDTH; x++)
-              for(int y=0; y<MATRIX_HEIGHT; y++)
-                grid[x][y] = (random8() > 180);
-            initialized = true;
+        static bool grid[MATRIX_WIDTH][MATRIX_HEIGHT];
+        static bool nextGrid[MATRIX_WIDTH][MATRIX_HEIGHT];
+        static byte heat[MATRIX_WIDTH][MATRIX_HEIGHT]; 
+        static bool initialized = false;
+        static unsigned long lastSimTick = 0;
+        static unsigned long lastDrawTick = 0;
+        
+        uint16_t simDelayMs = map(pxSpeeds[(int)currentEffect], 1, 100, 1000, 200);
+        
+        if (!initialized) {
+          for(int x=0; x<MATRIX_WIDTH; x++) {
+            for(int y=0; y<MATRIX_HEIGHT; y++) {
+              grid[x][y] = (random8() > 180);
+              heat[x][y] = grid[x][y] ? 255 : 0;
+            }
           }
+          initialized = true;
+          lastSimTick = now;
+        }
+        
+        // --- 1. Simulation Step (Slow, driven by speed slider) ---
+        if (now - lastSimTick > simDelayMs) {
+          lastSimTick = now;
           
           int aliveCount = 0;
           for(int x=0; x<MATRIX_WIDTH; x++) {
@@ -700,13 +709,37 @@ void loop() {
             }
           }
           
-          if (aliveCount < 3) initialized = false; // Reset if dead
+          if (aliveCount < 2) initialized = false; // Reset if dead or frozen
           
           for(int x=0; x<MATRIX_WIDTH; x++) {
             for(int y=0; y<MATRIX_HEIGHT; y++) {
               grid[x][y] = nextGrid[x][y];
-              if(grid[x][y]) leds[XY(x,y)] = CRGB(targetR, targetG, targetB);
-              else leds[XY(x,y)].fadeToBlackBy(100);
+            }
+          }
+        }
+        
+        // --- 2. Smooth Drawing (Fast, 30fps) ---
+        if (now - lastDrawTick > 33) {
+          lastDrawTick = now;
+          CHSV baseHSV = rgb2hsv_approximate(CRGB(targetR, targetG, targetB));
+          
+          for(int x=0; x<MATRIX_WIDTH; x++) {
+            for(int y=0; y<MATRIX_HEIGHT; y++) {
+              
+              // Smoothly chase target heat
+              if (grid[x][y]) {
+                heat[x][y] = qadd8(heat[x][y], 12); // fade in gracefully
+              } else {
+                heat[x][y] = qsub8(heat[x][y], 6);  // fade out gracefully
+              }
+              
+              // Map heat to brightness and slight hue shift for an organic look
+              byte bright = heat[x][y];
+              if (bright < 120) bright = dim8_video(bright); // gamma curve for soothing tails
+              
+              byte hueShift = map(heat[x][y], 0, 255, -20, 10);
+              
+              leds[XY(x,y)] = CHSV(baseHSV.hue + hueShift, 255, bright);
             }
           }
           FastLED.show();
