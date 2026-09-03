@@ -45,6 +45,9 @@ unsigned long lastUpdate = 0;
 enum Effect { SOLID, TETRIS, MATRIX_RAIN, PLASMA, GAME_OF_LIFE, FIRE, TEXT_FADE, TEXT_DROP, TEXT_SLIDE, CANDY_CRUSH, FIREWORKS, VU_METER, PACMAN, FALLING_SAND, SMART_SNAKE, WARP_SPEED, RAIN_RIPPLES };
 Effect currentEffect = SOLID;
 
+CRGB customTetrisColors[3];
+uint8_t numCustomTetrisColors = 0;
+
 // --- Helper Functions ---
 // Convert (x, y) coordinates to 1D array index
 uint16_t XY(uint8_t x, uint8_t y) {
@@ -255,8 +258,6 @@ bool tetrominoes[7][4][4] = {
   {{1,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}}
 };
 CRGB tetColors[7] = {CRGB::Cyan, CRGB::Blue, CRGB::Orange, CRGB::Yellow, CRGB::Green, CRGB::Purple, CRGB::Red};
-CRGB customTetrisColors[3];
-uint8_t numCustomTetrisColors = 0;
 
 bool checkCollision(int x, int y, int type) {
   for(int r=0; r<4; r++) {

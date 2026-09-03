@@ -1049,7 +1049,8 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
           window.togglePxColor = togglePxColor;
           window.togglePxEffect = togglePxEffect;
           window.setPxColor = setPxColor;
-          window.handlePxColorPicker = handlePxColorPicker;
+          window.togglePxColorWheel = togglePxColorWheel;
+          window.applyPxWheelColor = applyPxWheelColor;
           window.setPxEffect = setPxEffect;
             window.clearTetrisPalette = clearTetrisPalette;
           window.clearTetrisPalette = clearTetrisPalette;
@@ -1136,15 +1137,42 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
               sendPxUpdate();
           }
           
-          function handlePxColorPicker(inputElement) {
-              const hex = inputElement.value; // e.g. "#ff0000"
-              const r = parseInt(hex.slice(1, 3), 16);
-              const g = parseInt(hex.slice(3, 5), 16);
-              const b = parseInt(hex.slice(5, 7), 16);
-              
-              // Get the parent color-btn and pass it to setPxColor to handle the palette addition
-              const btn = inputElement.closest('.px-color-btn');
-              setPxColor(btn, r, g, b);
+          let pxColorPickerObj = null;
+
+          function togglePxColorWheel(btn) {
+              const container = document.getElementById('pxColorWheelContainer');
+              if (container.style.display === 'none' || container.style.display === '') {
+                  container.style.display = 'flex';
+                  // Initialize if not done yet
+                  if (!pxColorPickerObj) {
+                      pxColorPickerObj = new iro.ColorPicker('#pxColorWheel', {
+                          width: 150,
+                          color: "#ff0000",
+                          borderWidth: 2,
+                          borderColor: "#ffffff",
+                          layout: [
+                              { component: iro.ui.Wheel },
+                              { component: iro.ui.Slider, options: { sliderType: 'value' } }
+                          ]
+                      });
+                  }
+                  
+                  if (btn) {
+                      document.querySelectorAll('.px-color-btn').forEach(b => b.classList.remove('active'));
+                      btn.classList.add('active');
+                  }
+              } else {
+                  container.style.display = 'none';
+              }
+          }
+
+          function applyPxWheelColor() {
+              if (pxColorPickerObj) {
+                  const color = pxColorPickerObj.color.rgb;
+                  // We don't have a specific button to pass here, so we pass null.
+                  // setPxColor handles null gracefully.
+                  setPxColor(null, color.r, color.g, color.b);
+              }
           }
 
           function setPxEffect(btn, effect) {

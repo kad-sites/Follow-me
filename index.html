@@ -431,6 +431,7 @@
             display: flex !important;
         }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
 </head>
 <body>
 
@@ -979,9 +980,17 @@
                       <button class="color-btn px-color-btn" data-r="255" data-g="255" data-b="0" onclick="setPxColor(this, 255, 255, 0)">
                           <div class="color-swatch" style="background: rgb(255,255,0)"></div>
                       </button>
-                      <div class="color-btn px-color-btn" style="position: relative; overflow: hidden; background: linear-gradient(45deg, red, orange, yellow, green, blue, purple); cursor: pointer;" title="Custom Color Picker">
-                          <input type="color" id="pxColorPicker" value="#ff0000" style="position: absolute; top: -10px; left: -10px; width: 100px; height: 100px; opacity: 0; cursor: pointer;" onchange="handlePxColorPicker(this)">
-                          <div class="color-swatch" style="background: transparent; border: 2px solid white; pointer-events: none;"></div>
+                      <button class="color-btn px-color-btn" style="background: linear-gradient(45deg, red, orange, yellow, green, blue, purple);" onclick="togglePxColorWheel(this)">
+                          <div class="color-swatch" style="background: transparent; border: 2px solid white;"></div>
+                      </button>
+                  </div>
+                  
+                  <!-- iro.js Color Picker Container (Hidden by default) -->
+                  <div id="pxColorWheelContainer" style="display: none; justify-content: center; margin-top: 16px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 12px;">
+                      <div id="pxColorWheel"></div>
+                      <div style="margin-left: 16px; display: flex; flex-direction: column; justify-content: center; gap: 8px;">
+                          <button onclick="applyPxWheelColor()" style="background: var(--accent); color: #000; border: none; border-radius: 6px; padding: 8px 12px; font-weight: bold; cursor: pointer; font-size: 11px;">Apply</button>
+                          <button onclick="togglePxColorWheel()" style="background: rgba(255,255,255,0.1); color: var(--subtext); border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 11px;">Close</button>
                       </div>
                   </div>
               </div>
