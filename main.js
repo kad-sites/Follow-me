@@ -1095,10 +1095,44 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
             sendPxUpdate();
         }
 
+          function updateTetrisSlots() {
+              for (let i = 0; i < 3; i++) {
+                  const slot = document.getElementById('tslot' + i);
+                  if (!slot) continue;
+                  if (i < tetrisPalette.length) {
+                      const c = tetrisPalette[i];
+                      slot.style.background = `rgb(${c.r},${c.g},${c.b})`;
+                      slot.style.borderColor = `rgba(${c.r},${c.g},${c.b},0.5)`;
+                      slot.style.boxShadow = `0 0 8px rgba(${c.r},${c.g},${c.b},0.3)`;
+                  } else {
+                      slot.style.background = 'rgba(255,255,255,0.04)';
+                      slot.style.borderColor = 'rgba(255,255,255,0.1)';
+                      slot.style.boxShadow = 'none';
+                  }
+              }
+          }
+
+          function clearTetrisPalette() {
+              tetrisPalette = [];
+              updateTetrisSlots();
+              sendPxUpdate();
+          }
+
           function setPxColor(btn, r, g, b) {
               document.querySelectorAll('.px-color-btn').forEach(b => b.classList.remove('active'));
               if(btn) btn.classList.add('active');
               pxR = r; pxG = g; pxB = b;
+              
+              // If tetris is active, add to palette instead
+              if (pxEffect === 'tetris') {
+                  if (tetrisPalette.length < 3) {
+                      tetrisPalette.push({r, g, b});
+                  } else {
+                      // Replace last slot (cycle)
+                      tetrisPalette[2] = {r, g, b};
+                  }
+                  updateTetrisSlots();
+              }
               sendPxUpdate();
           }
           

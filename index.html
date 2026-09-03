@@ -937,14 +937,17 @@
                   </div>
               </div>
                             <div class="panel-content" id="pxColorContent">
-                    <div id="tetrisPaletteUI" style="display: none; margin-top: 12px; margin-bottom: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1);">
-                        <div style="font-size: 11px; color: var(--subtext); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Tetris Custom Palette (Max 3)</div>
-                        <div style="display: flex; gap: 8px; align-items: center;">
-                            <div class="palette-slot" id="tslot0" style="width: 24px; height: 24px; border-radius: 50%; border: 1px dashed rgba(255,255,255,0.3);"></div>
-                            <div class="palette-slot" id="tslot1" style="width: 24px; height: 24px; border-radius: 50%; border: 1px dashed rgba(255,255,255,0.3);"></div>
-                            <div class="palette-slot" id="tslot2" style="width: 24px; height: 24px; border-radius: 50%; border: 1px dashed rgba(255,255,255,0.3);"></div>
-                            <button onclick="clearTetrisPalette()" style="margin-left: auto; background: rgba(255,255,255,0.1); border: none; color: white; border-radius: 4px; padding: 4px 8px; font-size: 11px; cursor: pointer;">Clear Random</button>
+                    <div id="tetrisPaletteUI" style="display: none; margin: 12px 0 4px; padding: 10px 12px; background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.15); border-radius: 10px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                            <span style="font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: 0.5px;">TETRIS PALETTE</span>
+                            <button onclick="clearTetrisPalette()" style="background: none; border: 1px solid rgba(255,255,255,0.12); color: var(--subtext); border-radius: 6px; padding: 3px 10px; font-size: 10px; cursor: pointer; transition: all 0.2s; letter-spacing: 0.3px;">Reset</button>
                         </div>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <div class="palette-slot" id="tslot0" style="flex: 1; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; position: relative; overflow: hidden;"></div>
+                            <div class="palette-slot" id="tslot1" style="flex: 1; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; position: relative; overflow: hidden;"></div>
+                            <div class="palette-slot" id="tslot2" style="flex: 1; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; position: relative; overflow: hidden;"></div>
+                        </div>
+                        <div style="font-size: 10px; color: var(--subtext); margin-top: 6px; opacity: 0.6;">Tap colors below to fill slots · Max 3</div>
                     </div>
                     <div class="color-grid" style="margin-top: 12px;">
                       <!-- Warm/Whites -->
