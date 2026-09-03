@@ -128,8 +128,21 @@ void callback(char* topic, byte* payload, unsigned int length) {
     textIndex = 0;
     changed = true;
   }
-
   
+  if (doc.containsKey("tColors")) {
+    JsonArray arr = doc["tColors"];
+    numCustomTetrisColors = 0;
+    for (int i = 0; i < arr.size() && i < 3; i++) {
+      long hexColor = arr[i].as<long>();
+      uint8_t r = (hexColor >> 16) & 0xFF;
+      uint8_t g = (hexColor >> 8) & 0xFF;
+      uint8_t b = hexColor & 0xFF;
+      customTetrisColors[i] = CRGB(r, g, b);
+      numCustomTetrisColors++;
+    }
+    changed = true;
+  }
+
   if (doc.containsKey("effect")) {
     String effStr = doc["effect"].as<String>();
     if (effStr == "solid") currentEffect = SOLID;
@@ -340,8 +353,12 @@ void spawnTetromino() {
   }
   targetTetX = lowestC;
   
-  // Randomize the color of this brick type so it isn't always the same!
-  tetColors[currentTetType] = CHSV(random8(), 255, 255);
+  // Use custom palette if defined, else pick a random vibrant color!
+  if (numCustomTetrisColors > 0) {
+    tetColors[currentTetType] = customTetrisColors[random(numCustomTetrisColors)];
+  } else {
+    tetColors[currentTetType] = CHSV(random8(), 255, 255);
+  }
   
   // Spawn in a random location at the top so it has to steer to target
   currentTetX = random(MATRIX_WIDTH - (currentTetType + 1));
