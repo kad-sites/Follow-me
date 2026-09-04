@@ -920,7 +920,7 @@
               </div>
               <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 4px 0;"></div>
               <div class="section-header">
-                  <div class="section-title">Effect Speed</div>
+                  <div class="section-title" id="pxSpeedLabel">Effect Speed</div>
                   <div class="value-display" id="pxSpeedVal">50%</div>
               </div>
               <div class="slider-container">
@@ -1017,21 +1017,26 @@
               </div>
               <div class="panel-content" id="pxEffectContent">
                   <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 4px;">
-                      <button class="tv-effect-btn px-effect-btn active" onclick="setPxEffect(this, 'solid')">Solid Color</button>
-                      <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'tetris')">Tetris Animation</button>
+                        <button class="tv-effect-btn px-effect-btn active" onclick="setPxEffect(this, 'solid')">Solid Color</button>
+                        <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'tetris')">Tetris Animation</button>
                         <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'candy_crush')">Candy Crush</button>
-                      <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'matrix_rain')">Matrix Rain</button>
-                      <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'plasma')">Plasma Waves</button>
-                      <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'game_of_life')">Game of Life</button>
-                      <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'fire')">2D Fire</button>
+                        <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'matrix_rain')">Matrix Rain</button>
+                        <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'plasma')">Plasma Waves</button>
+                        <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'game_of_life')">Game of Life</button>
+                        <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'fire')">2D Fire</button>
                         <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'fireworks')">Fireworks</button>
-                        <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'vu_meter')">VU Meter</button>
-                        <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'music_pulse')">Music Pulse</button>
                         <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'pacman')">Pac-Man Chase</button>
                         <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'falling_sand')">Falling Sand</button>
                         <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'smart_snake')">Smart Snake</button>
                         <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'warp_speed')">Warp Speed</button>
                         <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'rain_ripples')">Rain Ripples</button>
+                        <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 6px 0;"></div>
+                        <span style="font-size: 11px; color: var(--subtext); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; padding-left: 8px;">Sound Reactive</span>
+                        <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'vu_meter')">🎵 VU Meter</button>
+                        <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'music_pulse')">🎵 Music Pulse</button>
+                        <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'music_fire')">🎵 Music Fire</button>
+                        <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'music_ripple')">🎵 Music Ripple</button>
+                        <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'music_pixels')">🎵 Music Pixels</button>
                         <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 6px 0;"></div>
                         <span style="font-size: 11px; color: var(--subtext); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; padding-left: 8px;">Text Animations</span>
                         <button class="tv-effect-btn px-effect-btn" style="margin-top:0;" onclick="setPxEffect(this, 'text_fade')">Text: Soft Fade</button>

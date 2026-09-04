@@ -46,13 +46,13 @@ const bool FLIP_X = false;  // Set true if letters are left-right mirrored
 const bool FLIP_Y = false;  // Set true if letters are upside-down
 // Set to true if your matrix strips run vertically instead of horizontally
 
-enum Effect { SOLID, TETRIS, MATRIX_RAIN, PLASMA, GAME_OF_LIFE, FIRE, TEXT_FADE, TEXT_DROP, TEXT_SLIDE, CANDY_CRUSH, FIREWORKS, VU_METER, PACMAN, FALLING_SAND, SMART_SNAKE, WARP_SPEED, RAIN_RIPPLES, MUSIC_PULSE };
+enum Effect { SOLID, TETRIS, MATRIX_RAIN, PLASMA, GAME_OF_LIFE, FIRE, TEXT_FADE, TEXT_DROP, TEXT_SLIDE, CANDY_CRUSH, FIREWORKS, VU_METER, PACMAN, FALLING_SAND, SMART_SNAKE, WARP_SPEED, RAIN_RIPPLES, MUSIC_PULSE, MUSIC_FIRE, MUSIC_RIPPLE, MUSIC_PIXELS };
 Effect currentEffect = SOLID;
 
 // --- State Variables ---
 bool pxIsOn = true;
-uint8_t pxBrightnesses[18] = {60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60};
-uint8_t pxSpeeds[18] = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
+uint8_t pxBrightnesses[21] = {60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60};
+uint8_t pxSpeeds[21] = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
 uint8_t targetR = 255, targetG = 147, targetB = 41;
 String pxText = "ZOHEB";
 int textIndex = 0;
@@ -114,7 +114,7 @@ void publishStatus() {
   doc["r"] = targetR;
   doc["g"] = targetG;
   doc["b"] = targetB;
-  doc["effect"] = currentEffect == SOLID ? "solid" : currentEffect == TETRIS ? "tetris" : currentEffect == MATRIX_RAIN ? "matrix_rain" : currentEffect == PLASMA ? "plasma" : currentEffect == GAME_OF_LIFE ? "game_of_life" : currentEffect == FIRE ? "fire" : currentEffect == TEXT_FADE ? "text_fade" : currentEffect == TEXT_DROP ? "text_drop" : currentEffect == TEXT_SLIDE ? "text_slide" : currentEffect == FIREWORKS ? "fireworks" : currentEffect == VU_METER ? "vu_meter" : currentEffect == PACMAN ? "pacman" : currentEffect == FALLING_SAND ? "falling_sand" : currentEffect == SMART_SNAKE ? "smart_snake" : currentEffect == WARP_SPEED ? "warp_speed" : currentEffect == RAIN_RIPPLES ? "rain_ripples" : currentEffect == MUSIC_PULSE ? "music_pulse" : "candy_crush";
+  doc["effect"] = currentEffect == SOLID ? "solid" : currentEffect == TETRIS ? "tetris" : currentEffect == MATRIX_RAIN ? "matrix_rain" : currentEffect == PLASMA ? "plasma" : currentEffect == GAME_OF_LIFE ? "game_of_life" : currentEffect == FIRE ? "fire" : currentEffect == TEXT_FADE ? "text_fade" : currentEffect == TEXT_DROP ? "text_drop" : currentEffect == TEXT_SLIDE ? "text_slide" : currentEffect == FIREWORKS ? "fireworks" : currentEffect == VU_METER ? "vu_meter" : currentEffect == PACMAN ? "pacman" : currentEffect == FALLING_SAND ? "falling_sand" : currentEffect == SMART_SNAKE ? "smart_snake" : currentEffect == WARP_SPEED ? "warp_speed" : currentEffect == RAIN_RIPPLES ? "rain_ripples" : currentEffect == MUSIC_PULSE ? "music_pulse" : currentEffect == MUSIC_FIRE ? "music_fire" : currentEffect == MUSIC_RIPPLE ? "music_ripple" : currentEffect == MUSIC_PIXELS ? "music_pixels" : "candy_crush";
   doc["text"] = pxText;
   char buffer[256];
   serializeJson(doc, buffer);
@@ -179,6 +179,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
       else if (effStr == "warp_speed") currentEffect = WARP_SPEED;
     else if (effStr == "rain_ripples") currentEffect = RAIN_RIPPLES;
     else if (effStr == "music_pulse") currentEffect = MUSIC_PULSE;
+    else if (effStr == "music_fire") currentEffect = MUSIC_FIRE;
+    else if (effStr == "music_ripple") currentEffect = MUSIC_RIPPLE;
+    else if (effStr == "music_pixels") currentEffect = MUSIC_PIXELS;
     changed = true;
     FastLED.clear(); // Clear board on effect change
   }
@@ -618,7 +621,7 @@ void loop() {
   FastLED.setBrightness(pxBrightnesses[(int)currentEffect]);
   unsigned long now = millis();
 
-  if (currentEffect == MUSIC_PULSE || currentEffect == VU_METER) processAudio();
+  if (currentEffect == MUSIC_PULSE || currentEffect == VU_METER || currentEffect == MUSIC_FIRE || currentEffect == MUSIC_RIPPLE || currentEffect == MUSIC_PIXELS) processAudio();
 
   switch (currentEffect) {
     case SOLID:
@@ -627,6 +630,121 @@ void loop() {
       break;
 
     
+      
+      case MUSIC_FIRE:
+        {
+          uint16_t delayMs = 30; // Fast update
+          if (now - lastUpdate > delayMs) {
+            lastUpdate = now;
+            
+            static byte heat[MATRIX_WIDTH][MATRIX_HEIGHT];
+            
+            // Step 1. Cool down every cell a little
+            for( int x = 0; x < MATRIX_WIDTH; x++) {
+              for( int y = 0; y < MATRIX_HEIGHT; y++) {
+                heat[x][y] = qsub8(heat[x][y], random8(0, 1200 / MATRIX_HEIGHT + 2));
+              }
+            }
+          
+            // Step 2. Heat from each cell drifts 'up' (y-1) and diffuses
+            for( int x = 0; x < MATRIX_WIDTH; x++) {
+              for( int y = 0; y < MATRIX_HEIGHT - 1; y++) {
+                heat[x][y] = (heat[x][y+1] + heat[(x-1+MATRIX_WIDTH)%MATRIX_WIDTH][y+1] + heat[(x+1)%MATRIX_WIDTH][y+1]) / 3;
+              }
+            }
+            
+            // Step 3. Ignite new sparks at bottom based on audio volume
+            for( int x = 0; x < MATRIX_WIDTH; x++) {
+              if(random8() < audioVolume) {
+                heat[x][MATRIX_HEIGHT-1] = qadd8(heat[x][MATRIX_HEIGHT-1], audioVolume);
+              } else {
+                // Decay the bottom row heavily if no beat
+                heat[x][MATRIX_HEIGHT-1] = qsub8(heat[x][MATRIX_HEIGHT-1], 20);
+              }
+            }
+          
+            // Step 4. Map heat to palette colors
+            for( int x = 0; x < MATRIX_WIDTH; x++) {
+              for( int y = 0; y < MATRIX_HEIGHT; y++) {
+                // Scale the heat value to the palette index (0-240)
+                byte colorIndex = scale8(heat[x][y], 240);
+                leds[XY(x,y)] = ColorFromPalette(HeatColors_p, colorIndex);
+              }
+            }
+            FastLED.show();
+          }
+        }
+        break;
+
+      case MUSIC_RIPPLE:
+        {
+          uint16_t delayMs = 20;
+          if (now - lastUpdate > delayMs) {
+            lastUpdate = now;
+            FastLED.clear();
+            
+            static float radius = 0;
+            static float energy = 0;
+            
+            // Audio injects energy
+            if (audioVolume > 150) {
+               energy += (audioVolume - 150) * 0.1;
+            }
+            
+            // Energy converts to radius
+            if (energy > 0) {
+               radius += energy * 0.2;
+               energy *= 0.8;
+            }
+            radius += 0.1; // slow baseline expansion
+            
+            if (radius > MATRIX_WIDTH) radius = 0;
+            
+            CHSV baseHSV = rgb2hsv_approximate(CRGB(targetR, targetG, targetB));
+            float cx = (MATRIX_WIDTH-1)/2.0;
+            float cy = (MATRIX_HEIGHT-1)/2.0;
+            
+            for(int x=0; x<MATRIX_WIDTH; x++){
+              for(int y=0; y<MATRIX_HEIGHT; y++){
+                float dist = sqrt((x-cx)*(x-cx) + (y-cy)*(y-cy));
+                float diff = abs(dist - radius);
+                
+                if (diff < 1.5) {
+                   float brightF = map(audioVolume, 0, 255, 100, 255) * (1.0 - diff/1.5);
+                   if(brightF<0) brightF=0;
+                   if(brightF>255) brightF=255;
+                   leds[XY(x,y)] = CHSV(baseHSV.hue + radius*10, baseHSV.sat, (byte)brightF);
+                }
+              }
+            }
+            FastLED.show();
+          }
+        }
+        break;
+
+      case MUSIC_PIXELS:
+        {
+          uint16_t delayMs = 30;
+          if (now - lastUpdate > delayMs) {
+            lastUpdate = now;
+            
+            // Fade existing pixels
+            for(int i=0; i<NUM_LEDS; i++) leds[i].fadeToBlackBy(40);
+            
+            // Spawn new pixels based on volume
+            int spawnCount = map(audioVolume, 0, 255, 0, 4);
+            CHSV baseHSV = rgb2hsv_approximate(CRGB(targetR, targetG, targetB));
+            
+            for(int i=0; i<spawnCount; i++) {
+               int rx = random8(MATRIX_WIDTH);
+               int ry = random8(MATRIX_HEIGHT);
+               leds[XY(rx,ry)] = CHSV(baseHSV.hue + random8(64) - 32, baseHSV.sat, map(audioVolume, 0, 255, 150, 255));
+            }
+            FastLED.show();
+          }
+        }
+        break;
+
       case MUSIC_PULSE:
         {
           float normVol = smoothedVolume / 255.0;

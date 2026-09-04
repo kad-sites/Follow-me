@@ -415,6 +415,13 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
                                 btn.classList.remove('active');
                             }
                         });
+                        
+                        let speedLabel = document.getElementById('pxSpeedLabel');
+                        if (speedLabel) {
+                            const musicEffects = ['vu_meter', 'music_pulse', 'music_fire', 'music_ripple', 'music_pixels'];
+                            if (musicEffects.includes(pxEffect)) speedLabel.innerText = "Sensitivity";
+                            else speedLabel.innerText = "Effect Speed";
+                        }
                     }
                     if (data.text !== undefined) {
                         pxText = data.text;
@@ -1175,7 +1182,7 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
               }
           }
 
-          function setPxEffect(btn, effect) {
+            function setPxEffect(btn, effect) {
                 document.querySelectorAll('.px-effect-btn').forEach(b => {
                     b.classList.remove('active');
                 });
@@ -1190,6 +1197,17 @@ let TOPIC_PX_STATUS = 'kad/pixora/status/zoheb';
                     let content = document.getElementById('pxColorContent');
                     if (content && content.style.maxHeight) {
                         content.style.maxHeight = content.scrollHeight + 50 + "px";
+                    }
+                }
+                
+                // Rename speed label to sensitivity for music effects
+                let speedLabel = document.getElementById('pxSpeedLabel');
+                if (speedLabel) {
+                    const musicEffects = ['vu_meter', 'music_pulse', 'music_fire', 'music_ripple', 'music_pixels'];
+                    if (musicEffects.includes(effect)) {
+                        speedLabel.innerText = "Sensitivity";
+                    } else {
+                        speedLabel.innerText = "Effect Speed";
                     }
                 }
                 
